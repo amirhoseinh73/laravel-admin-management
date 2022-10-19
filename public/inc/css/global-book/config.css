@@ -1,0 +1,134 @@
+:root {
+    --color-1: #bbbbbb;
+    --color-2: #5E5E5E;
+    --color-3: #CECECE;
+    --color-4: #E4E4E4;
+
+    --dark-1: #333333;
+
+
+    --dark-blue: #1D3B76;
+
+    --black: #000000;
+    --white: #ffffff;
+
+    --gradient-1: linear-gradient( 90deg, var( --black ) 70%, var( --color-2 ) 100% );
+    --gradient-1: linear-gradient( 180deg, var( --color-3 ) 70%, var( --color-4 ) 100% );
+
+    --shadow-outset-1: 11px 11px 22px rgba(161, 161, 161, 0.2), -11px -11px 22px rgba(161, 161, 161, 0.2), 11px -11px 22px rgba(255, 255, 255, 0.9), -11px 11px 28px rgba(161, 161, 161, 0.9);
+
+
+
+    --color_border: #b4c931;
+    --color_main: rgba(29, 59, 118, 1); /**1D3B76**/
+    --color_main_light: rgba(61, 109, 189, 1); /**3D6DBD**/
+    --color_main_light_trans: rgba(29, 59, 118, 0.7);
+    --color_main_lightest: rgba(29, 59, 118, 0.5);
+    --color_main_lightestest: rgba(29, 59, 118, 0.2);
+    --color_main_light_matt: rgb(73, 107, 173);
+    --color_light_iris: rgba(168, 192, 255, 1);
+
+    --color_purple: #A5A6F6;
+    --color_red: #D73232;
+    --color_red-2: #FF6D6D;
+    --color_red-3: #FF6D6D70;
+    --color_text: #9FA6C0;
+    --color_back_light: #F5F5FA;
+    --color_back_light-transparent: #F5F5FAa9;
+    --color_active: #F6A313;
+    --color_active_dark: #e89a1d;
+    --shadow-outset: -2px -2px 4px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(205, 205, 236, 0.25), -5px -5px 10px #FFFFFF, 5px 5px 10px rgba(205, 205, 236, 0.5);
+    --shadow-outset-small: -2px -2px 4px rgba(255, 255, 255, 0.5), 2px 2px 4px rgba(205, 205, 236, 0.25), -5px -5px 10px -4px #FFFFFF, 5px 5px 10px rgba(205, 205, 236, 0.5);
+    --shadow-outset-smallest: -1px -1px 2px #FFFFFF, 1px 1px 2px rgba(205, 205, 236, 0.5);
+    --shadow-inset: inset -2px -2px 4px rgba(255, 255, 255, 0.5), inset 2px 2px 4px rgba(205, 205, 236, 0.25), inset 5px 5px 10px rgba(205, 205, 236, 0.5), inset -5px -5px 10px #FFFFFF;
+    --shadow-inset-small: inset 1px 1px 2px rgba(205, 205, 236, 0.5), inset -1px -1px 2px #FFFFFF;
+    --shadow-inset-small-icon: inset 0 0 2px rgba(205, 205, 236, 0.5), inset 0 0 2px #FFFFFF;
+    --student-shadow: -1px -1px 2px #FFFFFF, 1px 1px 2px rgba(205, 205, 236, 0.5);
+    --student-gradiant: linear-gradient(180deg, rgba(234, 229, 201, 0.4) 0%, rgba(234, 229, 201, 0.24) 38.54%, rgba(168, 192, 255, 0.4) 100%);
+    --color_2: #A8C0FF;
+    --color_2_transparent: #A8C0FF99;
+    --color_active_2: #A5CF4D;
+    --color_active_2_transparent: #A5CF4D99;
+    --color_active_2_3: #E5FFAE;
+    --color_back_dark: rgba(205, 205, 236, 0.5);
+    --border-gradiant: linear-gradient(-95deg, #FFDD66 6%, #5EE2FF 70%, #FFFFFF 100%);
+    --shadow-img: 0 4px 2px 0 rgba(0, 0, 0, 0.2);
+    --shadow-img-circle: 2px 1px 4px rgba(0, 0, 0, 0.4);
+    --shadow-inset-red: inset -2px -2px 4px rgba(255, 255, 255, 0.5), inset 2px 2px 4px rgba(205, 205, 236, 0.25), inset 5px 5px 10px rgba(205, 205, 236, 0.5), inset -5px -5px 10px #FFFFFF;
+    --shadow-outset-blue: -5px -5px 10px #80A3EA, 5px 5px 10px rgba(34, 34, 34, 0.5);
+    --shadow-inset-blue: inset -5px -5px 10px #80A3EA,inset 5px 5px 10px rgba(34, 34, 34, 0.5);
+}
+
+* {
+    outline: none !important;
+}
+
+img {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@supports (scrollbar-width: thin) {
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-1) var(--color-2);
+    }
+}
+
+@supports (-webkit-appearance:none) {
+    html {
+        height: 100%;
+    }
+
+    body {
+        height: 100%;
+    }
+}
+
+body {
+    direction: rtl;
+    width: 100vw;
+    overflow: hidden; /*overflow-x*/
+    text-align: right;
+    /* background-color: var(--color-1); */
+    background-image: url(../../img/bg-2.png);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    padding: 15px;
+    /* height: 10px; */
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-2);
+    border-width: 4px;
+    border-color: var(--white);
+    border-radius: 25px;
+    padding: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-1);
+    /*border: 1px solid var(--white);*/
+    border-radius: 25px;
+}
+
+video::-internal-media-controls-download-button { 
+    display:none; 
+}
+
+video::-webkit-media-controls-enclosure { 
+    overflow:hidden; 
+} 
+
+video::-webkit-media-controls-panel { 
+    width: calc(100% + 30px); /* Adjust as needed */ 
+}
+
+#toolbarContainer,
+#toolbarContainer *{
+    direction: ltr;
+}

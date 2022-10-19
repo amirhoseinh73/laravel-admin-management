@@ -25,7 +25,18 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Libraries/jalaliDate.php",
+            "app/Libraries/SmsIrUltraFastSendClass.php",
+
+            "app/Helpers/defines.php",
+            "app/Helpers/globalFunctions.php",
+            "app/Helpers/Grade.php",
+            "app/Helpers/PersianText.php",
+            "app/Helpers/Alert.php",
+            "app/Helpers/Helper.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -45,7 +56,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "start": "@php artisan serve"
     },
     "extra": {
         "laravel": {
@@ -55,7 +67,8 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "process-timeout": 0
     },
     "minimum-stability": "dev",
     "prefer-stable": true

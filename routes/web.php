@@ -14,4 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get( "/", [ UserController::class, "index" ] );
+Route::get( "/", [ UserController::class, "index" ] )->middleware( "ensureUserNotLoggedIn" );
+
+Route::post( "login-submit", [ UserController::class, "login" ] );
+
+Route::match( [ "get", "post" ], "logout", [ UserController::class, "logout" ] );
+
+Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] , function() {
+ 
+    Route::get( "/", [ UserController::class, "dashboard" ] );
+ 
+} );
