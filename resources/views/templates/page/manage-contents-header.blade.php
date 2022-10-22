@@ -1,0 +1,1 @@
+<link rel="stylesheet" type="text/css" href="{{ url( '/assets/libs/admin-resources/rwd-table/rwd-table.min.css' ) }}" />

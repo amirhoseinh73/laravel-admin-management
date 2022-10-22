@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CookieModel;
+use App\Models\Shopping\DiscountCodeModel;
+use App\Models\Shopping\ProductModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -30,4 +34,21 @@ class Controller extends BaseController
     }
 
 	protected $callInsideFunctionControllers = false;
+
+    //models
+    protected function userModel() {
+        return new UserModel();
+    }
+
+    protected function cookieModel() {
+        return new CookieModel();
+    }
+
+    protected function productModel() {
+        return new ProductModel();
+    }
+
+    protected function discountCodeModel() {
+        return new DiscountCodeModel();
+    }
 }

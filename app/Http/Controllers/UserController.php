@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Alert;
 use App\Helpers\PersianText;
-use App\Models\UserModel;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -30,8 +29,8 @@ class UserController extends Controller
         if ( ! exists( $username ) ) return Alert::Error( "wrong_nationalCode" );
         if ( ! exists( $password ) ) return Alert::Error( "wrong_password" );
 
-        $users = new UserModel();
-        $selectCurrentUser = $users->selectUserWithUsername( $username );
+        $userModel = $this->userModel();
+        $selectCurrentUser = $userModel->selectUserWithUsername( $username );
         if ( ! exists( $selectCurrentUser ) ) return Alert::Error( "wrong_nationalCode" );
 
         $checkPassword = password_verify( md5( $password ), $selectCurrentUser->password );
@@ -44,7 +43,7 @@ class UserController extends Controller
             'is_logged_in' => true,
             'last_login_at' => date('Y-m-d H:i:s'),
         ];
-        $users->updateUserDataWithUserID( +$selectCurrentUser->id, $dataToUpdate );
+        $userModel->updateUserDataWithUserID( +$selectCurrentUser->id, $dataToUpdate );
 
         return Alert::Success( 200, $userData );
     }
@@ -59,7 +58,7 @@ class UserController extends Controller
         }
 
         CookieController::Unset( $userInfo->cookie );
-        $userModel = new UserModel();
+        $userModel = $this->userModel();
         $dataToUpdate = [
             "is_logged_in" => false
         ];

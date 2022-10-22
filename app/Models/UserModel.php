@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,6 +34,16 @@ class UserModel extends Model
         "cookie",
         "password",
     ];
+
+    public function getCreatedAtAttribute( $value ) {
+        $date = new Carbon( $value );
+        return $date->format( "Y-m-d H:i:s" );
+    }
+
+    public function getUpdatedAtAttribute( $value ) {
+        $date = new Carbon( $value );
+        return $date->format( "Y-m-d H:i:s" );
+    }
 
     public function selectUserWithUsername( string $username ) {
         // return DB::table( $this->table )

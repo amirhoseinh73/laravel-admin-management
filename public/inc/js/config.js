@@ -1,9 +1,15 @@
 const Routes = {
-    dashboard: base_url,
+    url: url,
+    login: url + "/login",
+    dashboard: url + "/dashboard",
     
-    generateCode: base_url + "/dashboard/generate-activation-code/api/generate-code",
-    listCode: base_url + "/dashboard/generate-activation-code/api/list-code",
+    generateCode: url + "/dashboard/generate-activation-code/api/generate-code",
+    listCode: url + "/dashboard/generate-activation-code/api/list-code",
     
-    offlinePageFormSubmit: base_url + "/api/offline/activation/generate-code-page",
-    recaptcha: base_url + "/api/offline/activation/recaptcha",
+    offlinePageFormSubmit: url + "/api/offline/activation/generate-code-page",
+    recaptcha: url + "/api/offline/activation/recaptcha",
+
+    discountCodeCreate: url + '/dashboard/discount-code/create',
+    discountCodeLoad: url + '/dashboard/discount-code/load',
+    discountCodeRemove: url + '/dashboard/discount-code/remove',
 }

@@ -118,7 +118,10 @@ function submit_code() {
         }
 
         $.ajax({
-            url: base_url + '/dashboard/discount-code/create',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: Routes.discountCodeCreate,
             method: 'POST',
             data: {
                 type_code: type_code,
@@ -182,7 +185,10 @@ function submit_code() {
 function loadData() {
     $('#datatable-buttons tbody').html('');
     $.ajax({
-        url: base_url + '/dashboard/discount-code/load',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: Routes.discountCodeLoad,
         method: 'POST',
         dataType: 'json',
         success: (respond) => {
@@ -312,7 +318,10 @@ function remove_discount_code(){
             if (resp.value) {
                 let id = $(this).parents('tr').attr('id');
                 $.ajax({
-                    url: base_url + '/dashboard/discount-code/remove',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: Routes.discountCodeRemove,
                     method: 'POST',
                     dataType: 'json',
                     data: {

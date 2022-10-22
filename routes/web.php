@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\ActivationCodeController;
+use App\Http\Controllers\DiscountCodeController;
+use App\Http\Controllers\ManageContentBookController;
+use App\Http\Controllers\Offline\ManageOfflineBookController;
+use App\Http\Controllers\Offline\OfflineApiController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get( "/", [ UserController::class, "index" ] )->middleware( "ensureUserNotLoggedIn" );
 
-Route::post( "login-submit", [ UserController::class, "login" ] );
+Route::post( "login", [ UserController::class, "login" ] );
 
 Route::match( [ "get", "post" ], "logout", [ UserController::class, "logout" ] );
 
@@ -24,4 +30,52 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
  
     Route::get( "/", [ UserController::class, "dashboard" ] );
  
+    Route::group( [ "prefix" => "discount-code" ], function() {
+        Route::get( "/", [ DiscountCodeController::class, "index" ] );
+        Route::post( "create", [ DiscountCodeController::class, "create" ] );
+        Route::post( "load", [ DiscountCodeController::class, "load" ] );
+        Route::post( "remove", [ DiscountCodeController::class, "remove" ] );
+    } );
+
+    Route::group( [ "prefix" => "manage-book-content" ], function() {
+        Route::get( "/", [ ManageContentBookController::class, "index" ] );
+        Route::get( "list-grade", [ ManageContentBookController::class, "listGrade" ] );
+        Route::get( "list-book", [ ManageContentBookController::class, "listBook" ] );
+        Route::get( "list-content", [ ManageContentBookController::class, "listContent" ] );
+
+        Route::get( "list-all-book", [ ManageContentBookController::class, "listAllBooks" ] );
+
+        Route::get( "content-remove", [ ManageContentBookController::class, "contentRemove" ] );
+        Route::get( "content-update", [ ManageContentBookController::class, "contentUpdate" ] );
+    } );
+
+    Route::group( [ "prefix" => "generate-activation-code" ], function() {
+        Route::get( "/", [ ActivationCodeController::class, "index" ] );
+
+        Route::group( [ "prefix" => "api" ], function() {
+            Route::post( "generate-code", [ ActivationCodeController::class, "generate" ] );
+            Route::get( "list-code", [ ActivationCodeController::class, "list" ] );
+            Route::get( "list-product", [ ProductController::class, "list" ] );
+        } );
+    } );
 } );
+
+Route::group( [ "prefix" => "api/offline" ], function() {
+    Route::get( "version", [ OfflineApiController::class, "getVersion" ] );
+
+    Route::group( [ "prefix" => "list" ], function() {
+        Route::post( "book", [ OfflineApiController::class, "getListBooks" ] );
+        Route::get( "video", [ OfflineApiController::class, "getListVideos" ] );
+    } );
+
+    Route::group( [ "prefix" => "activation" ], function() {
+        Route::post( "generate-code-page", [ ManageOfflineBookController::class, "generateActivationCodePage" ] );
+        Route::get( "recaptcha", [ ManageOfflineBookController::class, "refreshCaptcha" ] );
+
+        // Route::get( "add-codes-to-db", [ ManageOfflineBookController::class, "addCodesFromExcelToDB" ] );
+        // Route::get( "update-codes-for-shopping", [ ManageOfflineBookController::class, "updateSiteCodesFromExcelToDB" ] );
+    } );
+} );
+
+Route::get( "/sms/get.php", [ ManageOfflineBookController::class, "generateActivationCode" ] );
+Route::get( "activation", [ ManageOfflineBookController::class, "page" ] );

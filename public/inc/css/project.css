@@ -9,7 +9,7 @@ input.success,input.success:focus{
     border: 1px solid var(--success);
     transition: all 300ms linear;
 }
-.ibv_vp_fix-loading {
+.fix-loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -24,7 +24,7 @@ input.success,input.success:focus{
     user-select: none;
     opacity: 0;
 }
-.ibv_vp_fix-loading .mdi {
+.fix-loading .mdi {
     /* position: absolute; */
     /*top: 50%;*/
     /*left: 50%;*/
@@ -33,7 +33,7 @@ input.success,input.success:focus{
     /* transform: translate(-50%,-50%); */
     display: block;
 }
-#ibv_vp_fix_loading_2{
+#fix_loading_2{
     background-color: rgba(203, 203, 203, 0.78);
 }
 

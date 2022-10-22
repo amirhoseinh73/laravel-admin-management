@@ -233,3 +233,8 @@ function html_loading() {
         }
     </style>`;
 }
+
+function getUrl() {
+    const queryString = window.location.search;
+    return new URLSearchParams(queryString);
+}
