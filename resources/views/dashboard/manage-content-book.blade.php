@@ -1,3 +1,6 @@
+@include('templates.header.dashboard-header-top')
+@include('templates.page.manage-contents-header')
+@include('templates.header.dashboard-header-bottom')
 <!-- ============================================================== -->
 <div class="main-content">
 
@@ -7,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                    <h4 class="page-title mb-0 font-size-18"><?=$head_title?></h4>
+                    <h4 class="page-title mb-0 font-size-18">{{ $head_title }}</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item active"><?=$description?></li>
+                            <li class="breadcrumb-item active">{{ $description }}</li>
                         </ol>
                     </div>
 
@@ -46,7 +49,7 @@
                     <div class="card-body">
                         <h4 class="card-title mb-3" id="title_list_box">لیست محتواها</h4>
                         <div class="disable_focusable">
-                            <table id="manage_content_table" class="table table-bordered dt-responsive nowrap">
+                            <table id="manage_content_table" class="table table-bordered table-responsive nowrap">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -82,3 +85,7 @@
 
     </div>
     <!-- End Page-content -->
+
+@include('templates.footer.dashboard-footer-top')
+@include('templates.page.manage-contents-footer')
+@include('templates.footer.dashboard-footer-bottom')

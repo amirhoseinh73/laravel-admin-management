@@ -131,4 +131,7 @@
 
 @include('templates.footer.dashboard-footer-top')
 @include('templates.page.discount-code-footer')
+
+<script src="{{ url('/inc/js/discount_code.js?ver=' . env( "VERSION" )) }}"></script>
+
 @include('templates.footer.dashboard-footer-bottom')

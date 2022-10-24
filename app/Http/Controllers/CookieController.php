@@ -43,7 +43,7 @@ class CookieController extends Controller
                     'user_agent' => $token->user_agent,
                     'expired_at' => $token->expired_at,
                 ];
-                $cookieModel->saveNewCookie( $dataForCookie );
+                $cookieModel->create( $dataForCookie );
 
                 setcookie( env( "COOKIE_NAME" ), $token->token, time() + $time, '/' );
                 $data['status'] = 'success';

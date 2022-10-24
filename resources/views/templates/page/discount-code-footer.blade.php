@@ -12,6 +12,3 @@
 <script src="{{ url('/assets/libs/select2/js/select2.min.js') }}"></script>
 
 <script src="{{ url('/assets/js/libs/jquery.md.bootstrap.datetimepicker.js') }}"></script>
-
-
-<script src="{{ url('/inc/js/discount_code.js?ver=' . env( "VERSION" )) }}"></script>

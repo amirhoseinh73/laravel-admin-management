@@ -21,7 +21,7 @@ class CreateOfflineActivationCode extends Migration
             $table->string( 'user_code', 25 )->nullable();
             $table->string( 'generated_code', 10 )->nullable();
             $table->tinyInteger( 'limit_usage' )->default( 3 );
-            $table->string( 'mobile', 11 )->nullable();
+            $table->longText( 'mobile' )->nullable();
             $table->boolean( 'is_for_shopping_site' )->default( false )->comment( "اگر این کد برای فروش در سایت باشد" );
             $table->boolean( 'is_sold' )->nullable()->comment( "اگر از طریق سایت این کد فروخته شده باشد" );
             $table->integer( "order_id" )->nullable();

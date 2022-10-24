@@ -1,3 +1,6 @@
+@include('templates.header.dashboard-header-top')
+@include('templates.page.discount-code-header')
+@include('templates.header.dashboard-header-bottom')
 <!-- ============================================================== -->
 <div class="main-content">
 
@@ -7,11 +10,11 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-flex align-items-center justify-content-between">
-                    <h4 class="page-title mb-0 font-size-18"><?=$head_title?></h4>
+                    <h4 class="page-title mb-0 font-size-18">{{ $head_title }}</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item active"><?=$description?></li>
+                            <li class="breadcrumb-item active">{{ $description }}</li>
                         </ol>
                     </div>
 
@@ -32,13 +35,11 @@
                                         نوع محصول *
                                     </label>
                                     <select class="form-control" id="product_list">
-                                        <?php
-                                            if( isset($product_list) ) {
-                                                foreach( $product_list as $product ) {
-                                                    echo "<option value='$product->ID'>$product->title</option>";
-                                                }
-                                            }
-                                        ?>
+                                        @if( isset( $product_list ) )
+                                            @foreach( $product_list as $product )
+                                                <option value="{{ $product->ID }}">{{ $product->title }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-3">
@@ -93,3 +94,9 @@
 
     </div>
     <!-- End Page-content -->
+@include('templates.footer.dashboard-footer-top')
+@include('templates.page.discount-code-footer')
+
+<script src="{{ url('/inc/js/activation-code.js?ver=' . env( "VERSION" )) }}"></script>
+
+@include('templates.footer.dashboard-footer-bottom')

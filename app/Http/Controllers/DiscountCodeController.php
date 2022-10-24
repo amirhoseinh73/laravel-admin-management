@@ -15,7 +15,6 @@ class DiscountCodeController extends Controller
             'head_title'    => PersianText::WORD[ "discount_code" ],
             'description'   => PersianText::WORD[ "discount_code_management" ],
             'user_data'     => $this->userInfo( $request ),
-            'discount_code' => true
         );
         return view( 'dashboard.discount-code', $data );
     }

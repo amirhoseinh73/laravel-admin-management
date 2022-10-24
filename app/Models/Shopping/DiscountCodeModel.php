@@ -2,12 +2,11 @@
 
 namespace App\Models\Shopping;
 
-use Carbon\Carbon;
+use App\Models\ParentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class DiscountCodeModel extends Model
+class DiscountCodeModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -30,16 +29,6 @@ class DiscountCodeModel extends Model
         "expired_at",
     ];
 
-    public function getCreatedAtAttribute( $value ) {
-        $date = new Carbon( $value );
-        return $date->format( "Y-m-d H:i:s" );
-    }
-
-    public function getUpdatedAtAttribute( $value ) {
-        $date = new Carbon( $value );
-        return $date->format( "Y-m-d H:i:s" );
-    }
-
     public function selectCodeByCode( $discountCode ) {
         return self::where( 'discount_code', "=", $discountCode )->first();
     }
@@ -55,13 +44,4 @@ class DiscountCodeModel extends Model
     public function deleteCodeByID( $ID ) {
         return self::where( "ID", "=", $ID )->delete();
     }
-
-
-    /***
-     * $data = $data->map(function ($user) {
-            return collect($user->toArray())
-                // ->only(['id', 'name', 'email'])
-                ->all();
-        })->toArray();
-     */
 }

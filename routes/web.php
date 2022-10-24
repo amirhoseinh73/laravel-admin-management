@@ -45,8 +45,8 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
 
         Route::get( "list-all-book", [ ManageContentBookController::class, "listAllBooks" ] );
 
-        Route::get( "content-remove", [ ManageContentBookController::class, "contentRemove" ] );
-        Route::get( "content-update", [ ManageContentBookController::class, "contentUpdate" ] );
+        Route::post( "content-remove", [ ManageContentBookController::class, "contentRemove" ] );
+        Route::post( "content-update", [ ManageContentBookController::class, "contentUpdate" ] );
     } );
 
     Route::group( [ "prefix" => "generate-activation-code" ], function() {

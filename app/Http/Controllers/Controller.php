@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book\ActivationCodeModel;
+use App\Models\Book\BookModel;
+use App\Models\Book\ContentModel;
 use App\Models\CookieModel;
 use App\Models\Shopping\DiscountCodeModel;
 use App\Models\Shopping\ProductModel;
@@ -50,5 +53,17 @@ class Controller extends BaseController
 
     protected function discountCodeModel() {
         return new DiscountCodeModel();
+    }
+
+    protected function bookModel() {
+        return new BookModel();
+    }
+
+    protected function contentModel() {
+        return new ContentModel();
+    }
+
+    protected function activationCodeModel() {
+        return new ActivationCodeModel();
     }
 }

@@ -3,10 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CookieModel extends Model
+class CookieModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -24,16 +23,12 @@ class CookieModel extends Model
         "expired_at",
     ];
 
-    public function saveNewCookie( array $data ) {
-        return self::create( $data );
-    }
-
     public function selectNotExpiredCookie( string $cookie ) {
         return self::where( 'cookie', "=", $cookie )
                 ->where( 'expired_at', ">", date( 'Y-m-d H:i:s', time() ) )->first();
     }
 
     public function deleteCookie( string $cookie ) {
-        return self::where( 'cookie', $cookie )->delete();
+        return self::where( 'cookie', "=", $cookie )->delete();
     }
 }

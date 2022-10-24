@@ -15,11 +15,13 @@ function docReady(fn) {
  */
 async function ajaxFetch( url, successFunction, data ) {
     document.body.insertAdjacentHTML( "beforeend", html_loading() );
+    const preloader = document.getElementById( "preloader" );
     const form_data = new FormData();
     if ( data.method.toUpperCase() === "POST" ) {
         for ( const key in data.data ) {
             form_data.append( key , data.data[key] );
         }
+        form_data.append( "_token", document.querySelector( 'meta[name="csrf-token"]' ).getAttribute('content') )
     }
     return fetch( url , {
         method:  data.method,
@@ -28,11 +30,11 @@ async function ajaxFetch( url, successFunction, data ) {
     } )
     .then( ( response ) => response.json() )
     .then( ( respond ) => {
-        document.getElementById( "preloader" ).remove();
+        if ( preloader ) preloader.remove();
         return successFunction( respond );
     } )
     .catch( ( error ) => {
-        document.getElementById( "preloader" ).remove();
+        if ( preloader ) preloader.remove();
         console.error( 'Error:', error );
     } );
 }

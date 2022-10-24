@@ -2,11 +2,11 @@
 
 namespace App\Models\Book;
 
+use App\Models\ParentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BookModel extends Model
+class BookModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -27,4 +27,12 @@ class BookModel extends Model
         "count_page",
         "religion",
     ];
+
+    public function selectListBookByGrade( $gradeID ) {
+        return self::where( "grade", "=", $gradeID )->get();
+    }
+
+    public function selectAllBooksInArrayOfObject() {
+        return json_decode( self::all()->toJson() );
+    }
 }

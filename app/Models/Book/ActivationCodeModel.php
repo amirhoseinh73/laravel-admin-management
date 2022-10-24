@@ -2,11 +2,11 @@
 
 namespace App\Models\Book;
 
+use App\Models\ParentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ActivationCodeModel extends Model
+class ActivationCodeModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -28,4 +28,12 @@ class ActivationCodeModel extends Model
         "used",
         "users",
     ];
+
+    public function selectCodeByCode( $code ) {
+        return $this->where( "code", "=", $code )->first();
+    }
+
+    public function selectWithResource( $resource ) {
+        return $this->where( "resource", "=", $resource )->get();
+    }
 }

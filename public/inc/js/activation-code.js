@@ -12,9 +12,13 @@ function submit_code() {
         const productID   = parseInt($('#product_list').val());
         const count_code  = parseInt($('#count').val());
 
+        console.log($('meta[name="csrf-token"]').attr('content'));
         $.ajax({
             url: Routes.generateCode,
             method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             data: {
                 product_id: productID,
                 count: count_code,

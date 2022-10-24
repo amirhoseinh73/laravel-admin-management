@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-// use Illuminate\Support\Facades\DB;
 
-class UserModel extends Model
+class UserModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
@@ -35,20 +32,7 @@ class UserModel extends Model
         "password",
     ];
 
-    public function getCreatedAtAttribute( $value ) {
-        $date = new Carbon( $value );
-        return $date->format( "Y-m-d H:i:s" );
-    }
-
-    public function getUpdatedAtAttribute( $value ) {
-        $date = new Carbon( $value );
-        return $date->format( "Y-m-d H:i:s" );
-    }
-
     public function selectUserWithUsername( string $username ) {
-        // return DB::table( $this->table )
-        //         ->where( "username", "=", $username )
-        //         ->first();
         return self::where( "username", "=", $username )->first();
     }
 

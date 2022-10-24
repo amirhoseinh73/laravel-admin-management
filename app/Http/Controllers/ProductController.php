@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function list() {
         $selectAllProducts = $this->productModel()->all();
-        if ( $this->callInsideFunction ) return $selectAllProducts;
+        if ( $this->callInsideFunction ) return json_decode( $selectAllProducts->toJson() );
         
         return Alert::Success( 200, $selectAllProducts );
     }

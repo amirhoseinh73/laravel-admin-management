@@ -1,18 +1,11 @@
 class ManageContentBook {
 
     state = {
-        list_grade_url  : base_url + "/dashboard/manage-book-content/list-grade",
-        list_book_url   : base_url + "/dashboard/manage-book-content/list-book",
-        list_conetnt_url: base_url + "/dashboard/manage-book-content/list-content",
-
-        item_content_remove : base_url + "/dashboard/manage-book-content/content-remove",
-        item_content_update : base_url + "/dashboard/manage-book-content/content-update",
 
         offset  : 0,
         limit   : 20,
 
         list_all_books: [],
-        list_all_books_url: base_url + "/dashboard/manage-book-content/list-all-book",
     };
 
     static async documentReadyFunction() {
@@ -30,7 +23,7 @@ class ManageContentBook {
             method  : "GET",
         };
 
-        await ajaxFetch( this.state.list_grade_url, this.listGradeHandler, data );
+        await ajaxFetch( Routes.manageContentsListGrade, this.listGradeHandler, data );
     }
 
     listGradeHandler( respond ) {
@@ -60,7 +53,7 @@ class ManageContentBook {
                 method  : "GET",
             };
 
-            ajaxFetch( this.state.list_book_url + "?grade_id=" + data.data.grade_id, this.listBookHandler.bind( this ), data );
+            ajaxFetch( Routes.manageContentsListBook + "?grade_id=" + data.data.grade_id, this.listBookHandler.bind( this ), data );
         } );
         
     }
@@ -97,7 +90,7 @@ class ManageContentBook {
                 method  : "GET",
             };
 
-            ajaxFetch( this.state.list_conetnt_url + "?book_id=" + data.data.book_id, this.listContentHandler.bind( this ), data );
+            ajaxFetch( Routes.manageContentsListConetnt + "?book_id=" + data.data.book_id, this.listContentHandler.bind( this ), data );
         } );
         
     }
@@ -189,7 +182,7 @@ class ManageContentBook {
                 method  : "POST",
             };
 
-            ajaxFetch( this.state.item_content_remove, this.contentRemoveHandlerEventSuccess.bind( button ), data );
+            ajaxFetch( Routes.manageContentsRemoveItem, this.contentRemoveHandlerEventSuccess.bind( button ), data );
         } );
     }
 
@@ -235,7 +228,7 @@ class ManageContentBook {
                 method  : "POST",
             };
 
-            ajaxFetch( this.state.item_content_update, this.contentPageHandlerEventSuccess, data );
+            ajaxFetch( Routes.manageContentsUpdateItem, this.contentPageHandlerEventSuccess, data );
         }
 
         if ( td.classList.contains( "active" ) ) {
@@ -292,7 +285,7 @@ class ManageContentBook {
                 method  : "POST",
             };
 
-            ajaxFetch( this.state.item_content_update, this.contentStatusHandlerEventSuccess, data );
+            ajaxFetch( Routes.manageContentsUpdateItem, this.contentStatusHandlerEventSuccess, data );
         }
 
         if ( td.classList.contains( "active" ) ) {
@@ -374,7 +367,7 @@ class ManageContentBook {
             data.data[ column_name ] = text;
             data.data[ `is_${ column_name }` ] = true;
 
-            ajaxFetch( this.state.item_content_update, this.contentColumnHandlerEventSuccess, data );
+            ajaxFetch( Routes.manageContentsUpdateItem, this.contentColumnHandlerEventSuccess, data );
         }
 
         if ( td.classList.contains( "active" ) ) {
@@ -435,7 +428,7 @@ class ManageContentBook {
                 method  : "POST",
             };
 
-            ajaxFetch( this.state.item_content_update, this.contentBookIdHandlerEventSuccess, data );
+            ajaxFetch( Routes.manageContentsUpdateItem, this.contentBookIdHandlerEventSuccess, data );
         }
 
         if ( td.classList.contains( "active" ) ) {
@@ -453,7 +446,7 @@ class ManageContentBook {
                     data : {},
                     method  : "GET",
                 };
-                await ajaxFetch( this.state.list_all_books_url, saveAllBooks, data );
+                await ajaxFetch( Routes.manageContentsListAllBooks, saveAllBooks, data );
             }
 
             const loadAllBooksOptions = ( current_book_id ) => {
