@@ -17,4 +17,7 @@ yarn-error.log
 *.csv
 *.xlsx
 
-/public/json/*
+/public/json/*.json
+/public/log/*.json
+*.zip
+*.rar

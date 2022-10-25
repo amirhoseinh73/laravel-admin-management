@@ -60,5 +60,5 @@ docReady( () => {
    
     submitForm();
 
-    // callCaptcha()
+    callCaptcha()
 } )

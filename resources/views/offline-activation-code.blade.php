@@ -43,7 +43,7 @@
                             placeholder="پاسخ را بنویسید" inputmode="numeric"/>
                     </section>
                     <section id="captchaText" class="col-auto dir-ltr">
-                        {{ $captchaText }}
+                        {{-- {{ $captchaText }} --}}
                     </section>
                     <section class="col-auto px-0">
                         <label for="captchaAnswer" class="login-icon mb-0">

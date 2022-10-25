@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\DB;
 
 class ManageOfflineBookController extends Controller
 {
-    public function page( Request $request ) {
+    public function page() {
         $data_page = [
             "titlePage" => "دریافت کد فعالسازی آفلاین",
-            "captchaText" => createMathCaptchaText( $request ),
+            // "captchaText" => createMathCaptchaText( $request ),
         ];
 
         return view('offline-activation-code', $data_page );
@@ -38,13 +38,13 @@ class ManageOfflineBookController extends Controller
         $selectCode = $offlineActivationCodeModel->selectCodeByIndex( $indexCode );
 
         if ( ! exists( $selectCode ) ) return Alert::Error( "wrong_code" );
-        if ( +$selectCode->limit_usage === 0 ) return Alert::Error( "limit_code" );
 
         //no update
         if ( $selectCode->user_code === $userCode ) {
             Helper::sendSmsIR( $mobile, $generatedCode, "success" );
             return Alert::Success( "success_sms" );
         }
+        if ( +$selectCode->limit_usage === 0 ) return Alert::Error( "limit_code" );
 
         try {
             $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode );
@@ -77,10 +77,10 @@ class ManageOfflineBookController extends Controller
         $selectCode = $offlineActivationCodeModel->selectCodeByIndex( $indexCode );
 
         if ( ! exists( $selectCode ) ) return Helper::sendSmsIR( $mobile, $userCode, "wrong_code" );
-        if ( +$selectCode->limit_usage === 0 ) return Helper::sendSmsIR( $mobile, $userCode, "limit_code" );
 
         //no update
         if ( $selectCode->user_code === $userCode ) return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+        if ( +$selectCode->limit_usage === 0 ) return Helper::sendSmsIR( $mobile, $userCode, "limit_code" );
 
         try {
             $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode );
@@ -118,7 +118,9 @@ class ManageOfflineBookController extends Controller
             [
                 $mobile,
                 date( "Y-m-d H:i:s" ),
-                "page"
+                "page",
+                $generatedCode,
+                $userCode
             ]
         );
 
