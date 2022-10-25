@@ -76,4 +76,27 @@ class ContentModel extends ParentModel
     public function updateRowByID( $ID, $data ) {
         return self::where( "id", "=", $ID )->update( $data );
     }
+
+    public function selectBookIDWhereContentTypeVideo() {
+        return $this
+        ->select( [
+            "book_id",
+        ] )
+        ->distinct()
+        ->where( "type", "=", 1 )
+        ->get()
+        ->toArray();
+    }
+
+    public function selectListVideosByBookID( array $bookIDs ) {
+        return json_decode( $this
+        ->select( [
+            "book_id",
+            "url",
+        ] )
+        ->whereIn( "book_id", $bookIDs )
+        ->where( "type", "=", 1 )
+        ->get()
+        ->toJson() );
+    }
 }

@@ -17,7 +17,7 @@ class CreateOfflineActivationCode extends Migration
             $table->id();
             $table->string( 'grade', 10 )->nullable();
             $table->string( 'index_code', 6 );
-            $table->string( 'windows_code', 25 );
+            $table->string( 'windows_code', 25 )->unique();
             $table->string( 'user_code', 25 )->nullable();
             $table->string( 'generated_code', 10 )->nullable();
             $table->tinyInteger( 'limit_usage' )->default( 3 );

@@ -5,6 +5,18 @@ const alertHTML = ( alertText, alertClass ) => {
             </section>`
 }
 
+const callCaptcha = () => {
+    const captchaHTML = document.getElementById( "captchaText" )
+    if ( ! captchaHTML ) return
+
+    ajaxFetch( Routes.recaptcha, ( respond ) => {
+        captchaHTML.innerHTML = respond.data
+    }, {
+        method: "post",
+        data: {}
+    } )
+}
+
 const appendAlertHTML = ( respond ) => {
     const parentHTML = document.getElementById( "show_alert_message" );
     if ( ! parentHTML ) return
@@ -15,15 +27,7 @@ const appendAlertHTML = ( respond ) => {
     parentHTML.classList.remove( "d-none" );
     parentHTML.insertAdjacentHTML( "afterbegin", alertHTML( respond.message, respond.status ) )
 
-    const captchaHTML = document.getElementById( "captchaText" )
-    if ( ! captchaHTML ) return
-
-    ajaxFetch( Routes.recaptcha, ( respond ) => {
-        captchaHTML.innerHTML = respond.data
-    }, {
-        method: "post",
-        data: {}
-    } )
+    callCaptcha()
 }
 
 const submitHandler = ( e ) => {
@@ -56,4 +60,5 @@ docReady( () => {
    
     submitForm();
 
+    // callCaptcha()
 } )

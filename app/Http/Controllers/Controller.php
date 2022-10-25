@@ -6,6 +6,7 @@ use App\Models\Book\ActivationCodeModel;
 use App\Models\Book\BookModel;
 use App\Models\Book\ContentModel;
 use App\Models\CookieModel;
+use App\Models\OfflineActivationCodeModel;
 use App\Models\Shopping\DiscountCodeModel;
 use App\Models\Shopping\ProductModel;
 use App\Models\UserModel;
@@ -65,5 +66,9 @@ class Controller extends BaseController
 
     protected function activationCodeModel() {
         return new ActivationCodeModel();
+    }
+
+    protected function offlineActivationCodeModel() {
+        return new OfflineActivationCodeModel();
     }
 }

@@ -64,13 +64,13 @@ Route::group( [ "prefix" => "api/offline" ], function() {
     Route::get( "version", [ OfflineApiController::class, "getVersion" ] );
 
     Route::group( [ "prefix" => "list" ], function() {
-        Route::post( "book", [ OfflineApiController::class, "getListBooks" ] );
+        Route::get( "book", [ OfflineApiController::class, "getListBooks" ] );
         Route::get( "video", [ OfflineApiController::class, "getListVideos" ] );
     } );
 
     Route::group( [ "prefix" => "activation" ], function() {
         Route::post( "generate-code-page", [ ManageOfflineBookController::class, "generateActivationCodePage" ] );
-        Route::get( "recaptcha", [ ManageOfflineBookController::class, "refreshCaptcha" ] );
+        Route::post( "recaptcha", [ ManageOfflineBookController::class, "refreshCaptcha" ] );
 
         // Route::get( "add-codes-to-db", [ ManageOfflineBookController::class, "addCodesFromExcelToDB" ] );
         // Route::get( "update-codes-for-shopping", [ ManageOfflineBookController::class, "updateSiteCodesFromExcelToDB" ] );

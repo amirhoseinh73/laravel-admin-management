@@ -5,7 +5,18 @@ namespace App\Helpers;
 use App\Libraries\SmsIrUltraFastSendClass;
 
 class Helper {
-    public static function sendSmsIR( $mobile, $code ) {
+    public static function sendSmsIR( $mobile, $code, $templateName = "wrong_code" ) {
+        switch( $templateName ) {
+            case "wrong_code":
+                $templateID = 70163;
+                break;
+            case "limit_code":
+                $templateID = 70838;
+                break;
+            case "success":
+                $templateID = 70159;
+                break;
+        }
         try {
             date_default_timezone_set("Asia/Tehran");
     
@@ -23,11 +34,8 @@ class Helper {
                     ),
                 ),
                 "Mobile" => $mobile,
-                "TemplateId" => 70163,
+                "TemplateId" => $templateID,
             );
-            if ( strlen( $code )  === 6 && is_numeric( $code ) ) {
-                $data[ "TemplateId" ] = 70159;
-            }
     
             $SmsIR_UltraFastSend = new SmsIrUltraFastSendClass($APIKey, $SecretKey, $APIURL);
             $UltraFastSend = $SmsIR_UltraFastSend->ultraFastSend($data);

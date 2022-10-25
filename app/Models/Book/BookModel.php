@@ -35,4 +35,27 @@ class BookModel extends ParentModel
     public function selectAllBooksInArrayOfObject() {
         return json_decode( self::all()->toJson() );
     }
+
+    public function selectListBookByIDAndTypeAndGrade( array $bookIDs, $grade ) {
+        return json_decode( $this
+        ->select( [
+            "title",
+            "code"
+        ] )
+        ->where( "grade", "=", $grade )
+        ->where( "religion", "=", 0 )
+        ->whereIn( "id", $bookIDs )
+        ->where( "code", "not like", "%T%" )
+        ->get()
+        ->toJson() );
+    }
+
+    public function selectBookIDByBookCodeAndType( array $bookCodes ) {
+        return json_decode( $this
+        ->whereIn( "code", $bookCodes )
+        ->where( "religion", "=", 0 )
+        ->where( "code", "not like", "%T%" )
+        ->get()
+        ->toJson() );
+    }
 }

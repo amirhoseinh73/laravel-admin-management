@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /**
  * @author amirhosein hasani
  * check exists item -> isset() && !empty()
@@ -13,8 +15,12 @@ function exists( $data ) {
 }
 
 function jsonEncodeUnicode( array $data ) {
+    return json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+}
+
+function jsonEncodeUnicodeDie( array $data ) {
     header( "Content-Type: application/json" );
-    echo json_encode( $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+    echo jsonEncodeUnicode( $data );
     exit;
 }
 
@@ -238,12 +244,12 @@ function toFixed($number, $decimals = 1){
 
 function logFile($data, $name = null){
     if ( ! $name ) $name = "log-" . time() . ".json";
-    $log = fopen( public_path( $name ), "w+");
-    fwrite($log, json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-    fclose($log);
+    $log = fopen( public_path( "log/$name" ), "w+");
+    fwrite( $log, jsonEncodeUnicode( array( "data" => $data ) ) );
+    fclose( $log );
 }
 
-function createMathCaptchaText() {
+function createMathCaptchaText( Request $request ) {
     $operators = array(
         "+",
         "-",
@@ -272,15 +278,15 @@ function createMathCaptchaText() {
             break;
     }
 
-    $session = session();
-    $session->set( "captchaMathAnswer", $answer );
+    //set session
+    $request->session()->put( "captchaMathAnswer", $answer );
+    $request->session()->save();
 
     return "$firstNumber $operator $secondNumber = ";
 }
 
-function validateMathCaptchaAnswer( $userAnswer ) {
-    $session = session();
-    $systemAnswer = $session->get( "captchaMathAnswer" );
+function validateMathCaptchaAnswer( Request $request, $userAnswer ) {
+    $systemAnswer = $request->session()->pull( "captchaMathAnswer", null );
 
     if ( ! exists( $systemAnswer ) ) return false;
 
