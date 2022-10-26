@@ -15,7 +15,7 @@ class ManageContentBookController extends Controller
      */
     public function index( Request $request ) {
         $data_page = array(
-            "head_title"    => "ویرا پلتفرم | مدیریت محتوا",
+            "title"    => "مدیریت محتوا",
             "description"   => "مدیریت محتوای ویرابوک",
             'user_data'     => $this->userInfo( $request ),
         );
@@ -123,7 +123,7 @@ class ManageContentBookController extends Controller
         if ( ! exists( $content_id ) ) return Alert::Error( "wrong_inputs" );
 
         $content_model = $this->contentModel();
-        $select_content = $content_model->selectContentByID( $content_id );
+        $select_content = $content_model->selectItemByID( $content_id );
 
         if ( ! exists( $select_content ) ) return Alert::Error( -1 );
 

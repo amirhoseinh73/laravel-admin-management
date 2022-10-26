@@ -58,6 +58,13 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
             Route::get( "list-product", [ ProductController::class, "list" ] );
         } );
     } );
+
+    Route::group( [ "prefix" => "user" ], function() {
+        Route::get( "management", [ UserController::class, "management" ] );
+        Route::get( "list", [ UserController::class, "list" ] );
+        Route::post( "remove", [ UserController::class, "remove" ] );
+        Route::post( "update", [ UserController::class, "update" ] );
+    } );
 } );
 
 Route::group( [ "prefix" => "api/offline" ], function() {

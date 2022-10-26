@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Alert;
 use App\Helpers\PersianText;
+use Exception;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -70,12 +71,84 @@ class UserController extends Controller
 
     public function dashboard( Request $request ) {
         $data = [
-            'head_title'  => PersianText::WORD[ "dashboard" ] . "|" . PersianText::WORD[ "welcome" ],
+            'head_title'  => PersianText::WORD[ "dashboard" ] . " | " . PersianText::WORD[ "welcome" ],
             'title'       => PersianText::WORD[ "welcome" ],
             'description' => PersianText::WORD[ "dear_user" ] . " " .PersianText::WORD[ "welcome" ],
             'user_data'   => $this->userInfo( $request ),
         ];
 
         return view( 'dashboard.index', $data );
+    }
+
+    public function management( Request $request ) {
+        $data = [
+            'head_title'  => PersianText::WORD[ "dashboard" ] . " | " . PersianText::WORD[ "welcome" ],
+            'title'       => PersianText::WORD[ "user" ],
+            'description' => PersianText::WORD[ "user_management" ],
+            'user_data'   => $this->userInfo( $request ),
+        ];
+        
+        return view( "dashboard.user-list", $data );
+    }
+
+    public function list() {
+        $userModel = $this->userModel();
+        $userBookModel = $this->userBookModel();
+        $selectAllUsers = $userModel->selectAllUsersInPlatformAndBook( json_decode( $userBookModel->all()->toJson() ) );
+
+        foreach( $selectAllUsers as $user ) {
+            $user->created_at = convertGregorianDateTimeToJalaali( $user->created_at );
+            $user->updated_at = convertGregorianDateTimeToJalaali( $user->updated_at );
+            $user->last_login_at = convertGregorianDateTimeToJalaali( $user->last_login_at );
+            $user->recovered_password_at = convertGregorianDateTimeToJalaali( $user->recovered_password_at );
+        }
+        
+        return Alert::Success( 200, $selectAllUsers );
+    }
+
+    public function remove( Request $request ) {
+        $id    = $request->post( "id" );
+        if ( ! exists( $id ) ) return Alert::Error( "wrong_inputs" );
+
+        $userModel = $this->userModel();
+        $userBookModel = $this->userBookModel();
+        try {
+            $userModel->removeItemByID( $id );
+            $userBookModel->removeItemByPlatformID( $id );
+
+            return Alert::Success( 200 );
+        } catch( Exception $e ) {
+            return Alert::Error( -1 );
+        }
+    }
+
+    public function Update( Request $request ) {
+        $ID = $request->post( "id" );
+        $data = $request->post( "data" );
+        $key = $request->post( "key" );
+
+        if ( ! exists( $ID ) || ! exists( $data ) || ! exists( $key ) ) return Alert::Error( "wrong_inputs" );
+
+        $userModel = $this->userModel();
+        $userBookModel = $this->userBookModel();
+        $selectUser = $userModel->selectItemByID( $ID );
+
+        if ( ! exists( $selectUser ) ) return Alert::Error( -1 );
+
+        try {
+            $data = array(
+                "$key" => $data,
+            );
+
+            if ( $key === "grade" ) {
+                $userBookModel->updateItemByPlatformID( $ID, $data );
+            } else {
+                $userModel->updateRowByID( $ID, $data );
+            }
+
+            return Alert::Success( 200 );
+        } catch( Exception $e ) {
+            return Alert::Error( -1 );
+        }
     }
 }

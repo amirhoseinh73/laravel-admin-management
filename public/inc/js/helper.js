@@ -240,3 +240,106 @@ function getUrl() {
     const queryString = window.location.search;
     return new URLSearchParams(queryString);
 }
+
+function loadDataTable( ID = "datatable-buttons" ) {
+    let table = $( '#' + ID ).DataTable({
+        destroy: true,
+        lengthChange: true,
+        select: true,
+		buttons: ['copy', 'excel', 'pdf', 'colvis'],
+		language: {
+			"sEmptyTable":     "هیچ داده ای در جدول وجود ندارد",
+			"sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+			"sInfoEmpty":      "نمایش 0 تا 0 از 0 رکورد",
+			"sInfoFiltered":   "(فیلتر شده از _MAX_ رکورد)",
+			"sInfoPostFix":    "",
+			"sInfoThousands":  ",",
+			"sLengthMenu":     "نمایش _MENU_ رکورد",
+			"sLoadingRecords": "در حال بارگزاری...",
+			"sProcessing":     "در حال پردازش...",
+			"sSearch":         "جستجو:",
+			"sZeroRecords":    "رکوردی با این مشخصات پیدا نشد",
+			"oPaginate": {
+				"sFirst":    "ابتدا",
+				"sLast":     "انتها",
+				"sNext":     "بعدی",
+				"sPrevious": "قبلی"
+			},
+			"oAria": {
+				"sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+				"sSortDescending": ": فعال سازی نمایش به صورت نزولی"
+			},
+			"buttons": {
+				"copy": "کپی",
+				"excel": "اکسل",
+				"pdf": "PDF",
+				"colvis": "نمایش ستون ها",
+				"copyTitle": "کپی به حافظه",
+				"copySuccess":{
+					1:"1 سطر به حافظه کپی شد",
+					_:"%d سطر به حافظه کپی شد"
+				}
+			}
+		},
+    });
+
+    table.buttons().container().appendTo('#' + ID + '_wrapper .col-md-6:eq(0)');
+
+    $('#' + ID + 'tbody').on('mouseenter', 'td', function () {
+        var colIdx = table.cell(this).index().column;
+ 
+        $(table.cells().nodes()).removeClass('highlight');
+        $(table.column(colIdx).nodes()).addClass('highlight');
+    });
+
+    $('#' + ID + 'tbody').on('click', 'td.dt-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+ 
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+}
+
+function input_text_number() {
+    const input = document.querySelectorAll( "input[type='text'][data-input-type='number']" );
+    
+    input.forEach( item => {
+        item.addEventListener( "keypress", function( event ) {
+            if (event.which === 116) window.location.reload();
+
+            if ( (event.which < 48 || event.which > 57)) {
+                //  && event.which !== 190
+                event.preventDefault();
+                return false;
+                // this.value = this.value.replace(/[^\d]+/g,'');
+            }
+        } );
+    } );
+}
+
+function getSelectValues(select) {
+    var result = [];
+    var options = select && select.options;
+    var opt;
+  
+    for (var i=0, iLen=options.length; i<iLen; i++) {
+      opt = options[i];
+  
+      if (opt.selected) {
+        result.push(opt.value || opt.text);
+      }
+    }
+    return result;
+  }
+
+docReady( () => {
+    input_text_number();
+} )

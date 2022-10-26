@@ -27,6 +27,21 @@
                 <span>کدهای فعال سازی</span>
             </a>
         </li>
+
+        <li>
+            <a href="javascript:void(0)" class="has-arrow waves-effect">
+                <i class="fas fa-user"></i>
+                <span>مدیریت کاربران</span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li>
+                    <a href="{{ url( "dashboard/user/management" ) }}">
+                        <i class="fas fa-user-clock"></i>
+                        لیست کاربران
+                    </a>
+                </li>
+            </ul>
+        </li>
     @endif
     <li>
         <a href="{{ url( "/logout" ) }}" class="waves-effect">

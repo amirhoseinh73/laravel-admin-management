@@ -15,7 +15,7 @@ class ActivationCodeController extends Controller
         $productController->callInsideFunction = true;
 
         $dataForPage = array(
-            "head_title" => env( "SITE_NAME" ),
+            "title" => env( "SITE_NAME" ),
             "description" => "",
             "product_list" => $productController->list(),
             'user_data'     => $this->userInfo( $request ),

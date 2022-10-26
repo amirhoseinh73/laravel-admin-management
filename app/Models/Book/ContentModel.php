@@ -65,18 +65,6 @@ class ContentModel extends ParentModel
         return json_decode( $selectContent->toJson() );
     }
 
-    public function removeItemByID( $ID ) {
-        return self::where( "id", "=", $ID )->delete();
-    }
-
-    public function selectContentByID( $ID ) {
-        return self::where( "id", $ID )->first();
-    }
-
-    public function updateRowByID( $ID, $data ) {
-        return self::where( "id", "=", $ID )->update( $data );
-    }
-
     public function selectBookIDWhereContentTypeVideo() {
         return $this
         ->select( [

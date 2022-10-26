@@ -55,6 +55,8 @@ class PersianText {
             "dashboard"     => "داشبورد",
             "discount_code" => "کد تخفیف",
             "discount_code_management" => "مدیریت کدهای تخفیف",
+            "user"          => "کاربران",
+            "user_management" => "مدیریت کاربران",
 
             "success"       => "موفقیت!",
             "failed"        => "خطا!",

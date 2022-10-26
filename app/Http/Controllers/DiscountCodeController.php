@@ -6,13 +6,12 @@ use App\Helpers\Alert;
 use App\Helpers\PersianText;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class DiscountCodeController extends Controller
 {
     public function index ( Request $request ) {
         $data = array (
-            'head_title'    => PersianText::WORD[ "discount_code" ],
+            'title'    => PersianText::WORD[ "discount_code" ],
             'description'   => PersianText::WORD[ "discount_code_management" ],
             'user_data'     => $this->userInfo( $request ),
         );

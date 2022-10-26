@@ -211,6 +211,12 @@ function deleteOldFiles( array $files, string $address ) {
  * @return object `time` & `date`
  */
 function gregorianDatetimeToJalali( $datetime ) {
+    if( ! exists( $datetime ) ) {
+        return ( object ) [
+            "time" => "00:00:00",
+            "date" => "0000-00-00",
+        ];
+    }
     $datetime = explode( " ", $datetime );
     $time     = $datetime[ count( $datetime ) - 1 ];
     $date     = explode( "-", $datetime[ 0 ] );
@@ -220,6 +226,11 @@ function gregorianDatetimeToJalali( $datetime ) {
         "time" => $time,
         "date" => $date,
     ];
+}
+
+function convertGregorianDateTimeToJalaali( $datetime ) {
+    $datetime = gregorianDatetimeToJalali( $datetime );
+    return "$datetime->date $datetime->time";
 }
 
 /**

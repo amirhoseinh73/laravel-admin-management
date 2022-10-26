@@ -1,3 +1,5 @@
+</div>
+<!-- End Page-content -->
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">

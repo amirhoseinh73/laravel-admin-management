@@ -19,4 +19,9 @@ const Routes = {
     
     offlinePageFormSubmit: url + "/api/offline/activation/generate-code-page",
     recaptcha: url + "/api/offline/activation/recaptcha",
+
+    //users
+    userList: url + "/dashboard/user/list",
+    manageUserRemoveItem: url + "/dashboard/user/remove",
+    manageUserUpdateItem: url + "/dashboard/user/update",
 }

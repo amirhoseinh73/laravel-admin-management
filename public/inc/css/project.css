@@ -46,3 +46,7 @@ input.success,input.success:focus{
     left: auto;
     right: 0;
 }
+
+table .highlight {
+	background-color: #ccceee;
+}
