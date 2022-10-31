@@ -50,3 +50,11 @@ input.success,input.success:focus{
 table .highlight {
 	background-color: #ccceee;
 }
+
+.btn-view-password {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    height: calc(1.5em + .94rem + 2px);
+}

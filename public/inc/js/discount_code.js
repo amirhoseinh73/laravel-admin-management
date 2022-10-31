@@ -224,8 +224,8 @@ function loadData() {
                 </tr>
                 `);
             });
-            loadDataTable();
             remove_discount_code();
+            loadDataTable();
         }
     });
 }

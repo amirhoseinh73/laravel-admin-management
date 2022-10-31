@@ -24,7 +24,6 @@ class UserManagement {
             return;
         }
 
-        const click = "کلیک!";
         table_selector.innerHTML = "";
         respond.data.forEach( ( data, index ) => {
             table_selector.insertAdjacentHTML( "beforeend",
@@ -40,12 +39,15 @@ class UserManagement {
                 <td data-key="created_at">${ data.created_at }</td>
                 <td data-key="last_login_at">${ data.last_login_at }</td>
                 <td data-key="recovered_password_at">${ data.recovered_password_at }</td>
-                <td><button type="button" class="btn btn-danger waves-effect waves-light fas fa-times btn-remove-data"></button></td>
+                <td>
+                    <button type="button" class="btn btn-danger waves-effect waves-light fas fa-times btn-remove-data"></button>
+                    <button type="button" class="btn btn-warning waves-effect waves-light fas fa-key btn-reset-password"></button>
+                </td>
             </tr>` );
         } );
 
-        loadDataTable( "user_management_table" )
         this.itemDataHandler();
+        loadDataTable( "user_management_table" )
     }
 
     getStatus = ( index ) => {
@@ -96,6 +98,8 @@ class UserManagement {
 
         this.dataTypeTextHandler();
         this.dataTypeSelectHandler();
+
+        this.resetPasswordHandler()
     }
 
     dataRemoveHandler() {
@@ -283,6 +287,34 @@ class UserManagement {
         
         return eventKeyUpEnterHandler( save );
     }
+
+    resetPasswordHandler() {
+        const buttons = document.querySelectorAll( ".btn-reset-password" );
+
+        buttons.forEach( button => {
+            button.addEventListener( "click", ( e ) => {
+                const button = e.target.closest( ".btn-reset-password" );
+                if ( ! button ) return console.error( "button not found" );
+                this.resetPasswordHandlerEvemt.call( this, button );
+            } );
+        } );
+    }
+
+    resetPasswordHandlerEvemt( button ) {
+        sweetAlertConfirm( () => {
+            const id = button.closest( "[data-id]" ).getAttribute( "data-id" );
+
+            const data = {
+                data    : {
+                    id: id,
+                },
+                method  : "POST",
+            };
+
+            ajaxFetch( Routes.manageUserResetPassword, sweetAlert, data );
+        } );
+    }
+
 }
 
 function eventKeyUpEnterHandler( callback ) {

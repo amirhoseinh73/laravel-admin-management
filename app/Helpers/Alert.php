@@ -131,6 +131,11 @@ class Alert {
                 $message = PersianText::MESSAGE[ "limit_code" ];
                 $code = 120;
                 break;
+            case "used_nat_code":
+            case 121:
+                $message = PersianText::MESSAGE[ "used_nat_code" ];
+                $code = 121;
+                break;
         }
 
         if ( $show_code ) $message .= "Error " . $code;

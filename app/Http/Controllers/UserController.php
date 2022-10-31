@@ -20,9 +20,9 @@ class UserController extends Controller
     }
 
     public function login( Request $request ) {
-        $username = $request->get( "username" );
-        $password = $request->get( "password" );
-        $rememberMe = $request->get( "remember_me" );
+        $username = $request->post( "username" );
+        $password = $request->post( "password" );
+        $rememberMe = $request->post( "remember_me" );
 
         $cookieTime = DAY;
         if ( exists( $rememberMe ) && $rememberMe === "true" ) $cookieTime = MONTH;
@@ -148,6 +148,87 @@ class UserController extends Controller
 
             return Alert::Success( 200 );
         } catch( Exception $e ) {
+            return Alert::Error( -1 );
+        }
+    }
+
+    public function resetPassword( Request $request ) {
+        $id    = $request->post( "id" );
+        if ( ! exists( $id ) ) return Alert::Error( "wrong_inputs" );
+
+        $userModel = $this->userModel();
+        try {
+            $dataToUpdate = array(
+                "password" => password_hash( md5( "123456" ), PASSWORD_BCRYPT )
+            );
+            $userModel->updateUserDataWithUserID( $id, $dataToUpdate );
+
+            return Alert::Success( 200 );
+        } catch( Exception $e ) {
+            return Alert::Error( -1 );
+        }
+    }
+
+    public function registerPage( Request $request ) {
+        $data = [
+            'head_title'  => PersianText::WORD[ "dashboard" ] . " | " . PersianText::WORD[ "welcome" ],
+            'title'       => PersianText::WORD[ "user" ],
+            'description' => PersianText::WORD[ "register" ],
+            'user_data'   => $this->userInfo( $request ),
+        ];
+        
+        return view( "dashboard.user-register", $data );
+    }
+
+    public function register( Request $request ) {
+        $firstname = $request->post( "firstname" );
+        $lastname  = $request->post( "lastname" );
+        $username  = $request->post( "username" );
+        $mobile    = $request->post( "mobile" );
+        $password  = $request->post( "password" );
+        $gender    = $request->post( "gender" );
+        $grade     = $request->post( "grade" );
+
+        if ( ! exists( $firstname ) ) return Alert::Error( "wrong_firstname" );
+        if ( ! exists( $lastname ) ) return Alert::Error( "wrong_lastname" );
+        if ( ! isValidNationalCodeIran( $username ) ) return Alert::Error( "wrong_nationalCode" );
+        if ( ! isValidMobile( $mobile ) ) return Alert::Error( "wrong_mobile" );
+        if ( ! isValidPassword( $password ) ) return Alert::Error( "wrong_password" );
+        if ( ! exists( $gender ) ) return Alert::Error( "wrong_user_type" );
+        if ( ! exists( $grade ) ) return Alert::Error( "wrong_inputs" );
+
+        $userModel = $this->userModel();
+        $userBookModel = $this->userBookModel();
+
+        $selectExistUser = $userModel->selectUserWithUsername( $username );
+        if ( exists( $selectExistUser ) ) return Alert::Error( "used_nat_code" );
+
+        $dataToInsert = array(
+            "activation_code_id" => -1,
+            "username" => $username,
+            "firstname" => $firstname,
+            "lastname" => $lastname,
+            "mobile" => $mobile,
+            "gender" => $gender,
+            "status" => 1,
+            "password" => password_hash( md5( $password ), PASSWORD_BCRYPT )
+        );
+
+        try {
+            $result = $userModel->create( $dataToInsert );
+            if ( ! exists( $result ) || ! exists( $result->id ) ) return Alert::Error( "failed" );
+
+            $dataToInsertBookUser = array(
+                "platform_id" => $result->id,
+                "grade" => $grade,
+                "complete_signup" => true,
+            );
+            $result = $userBookModel->create( $dataToInsertBookUser );
+            if ( ! exists( $result ) || ! exists( $result->id ) ) return Alert::Error( "failed" );
+
+            return Alert::Success( 200 );
+        } catch( Exception $e ) {
+            logFile( $e );
             return Alert::Error( -1 );
         }
     }

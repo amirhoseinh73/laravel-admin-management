@@ -241,7 +241,7 @@ function getUrl() {
     return new URLSearchParams(queryString);
 }
 
-function loadDataTable( ID = "datatable-buttons" ) {
+function loadDataTable( ID = "datatable-buttons", callback = () => {} ) {
     let table = $( '#' + ID ).DataTable({
         destroy: true,
         lengthChange: true,
@@ -285,14 +285,14 @@ function loadDataTable( ID = "datatable-buttons" ) {
 
     table.buttons().container().appendTo('#' + ID + '_wrapper .col-md-6:eq(0)');
 
-    $('#' + ID + 'tbody').on('mouseenter', 'td', function () {
+    $('#' + ID + ' tbody').on('mouseenter', 'td', function () {
         var colIdx = table.cell(this).index().column;
  
         $(table.cells().nodes()).removeClass('highlight');
         $(table.column(colIdx).nodes()).addClass('highlight');
     });
 
-    $('#' + ID + 'tbody').on('click', 'td.dt-control', function () {
+    $('#' + ID + ' tbody').on('click', 'td.dt-control', function () {
         var tr = $(this).closest('tr');
         var row = table.row(tr);
  
@@ -306,6 +306,12 @@ function loadDataTable( ID = "datatable-buttons" ) {
             tr.addClass('shown');
         }
     });
+
+    // $('#' + ID).on( 'page.dt', function () {
+    //     // var info = table.page.info();
+    //     // console.log(info);
+    //     callback()
+    // } );
 }
 
 function input_text_number() {
@@ -338,8 +344,22 @@ function getSelectValues(select) {
       }
     }
     return result;
-  }
+}
+
+function viewPasswordButton() {
+    const btn = document.querySelector( ".btn-view-password" )
+    if ( ! btn ) return
+
+    btn.addEventListener( "click", function() {
+        const input = btn.closest( "div" ).querySelector( "input" )
+        if ( ! input ) return
+
+        if ( input.type.toUpperCase() === "PASSWORD" ) input.type = "text"
+        else if ( input.type.toUpperCase() === "TEXT" ) input.type = "password"
+    } )
+}
 
 docReady( () => {
     input_text_number();
+    viewPasswordButton()
 } )

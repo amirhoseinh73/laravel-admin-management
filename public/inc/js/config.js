@@ -21,7 +21,9 @@ const Routes = {
     recaptcha: url + "/api/offline/activation/recaptcha",
 
     //users
-    userList: url + "/dashboard/user/list",
-    manageUserRemoveItem: url + "/dashboard/user/remove",
-    manageUserUpdateItem: url + "/dashboard/user/update",
+    userList: url + "/dashboard/user/management/list",
+    manageUserRemoveItem: url + "/dashboard/user/management/remove",
+    manageUserUpdateItem: url + "/dashboard/user/management/update",
+    manageUserResetPassword: url + "/dashboard/user/management/reset-password",
+    manageUserRegister: url + "/dashboard/user/management/register",
 }

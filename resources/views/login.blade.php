@@ -42,12 +42,13 @@ use App\Helpers\PersianText;
                                        placeholder="{{ PersianText::WORD[ "username" ] }}">
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group position-relative">
                                 <label for="login_password">
                                     {{ PersianText::WORD[ "password" ] }}
                                 </label>
                                 <input type="password" class="form-control" id="login_password"
                                        placeholder="{{ PersianText::WORD[ "password" ] }}">
+                                <button type="button" class="btn btn-transparent fas fa-eye btn-view-password"></button>
                             </div>
 
                             <div class="custom-control custom-checkbox">

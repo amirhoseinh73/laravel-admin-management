@@ -60,10 +60,16 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
     } );
 
     Route::group( [ "prefix" => "user" ], function() {
-        Route::get( "management", [ UserController::class, "management" ] );
-        Route::get( "list", [ UserController::class, "list" ] );
-        Route::post( "remove", [ UserController::class, "remove" ] );
-        Route::post( "update", [ UserController::class, "update" ] );
+        Route::group( [ "prefix" => "management" ], function() {
+            Route::get( "/", [ UserController::class, "management" ] );
+            Route::get( "list", [ UserController::class, "list" ] );
+            Route::post( "remove", [ UserController::class, "remove" ] );
+            Route::post( "update", [ UserController::class, "update" ] );
+            Route::post( "reset-password", [ UserController::class, "resetPassword" ] );
+
+            Route::get( "register-form", [ UserController::class, "registerPage" ] );
+            Route::post( "register", [ UserController::class, "register" ] );
+        } );
     } );
 } );
 

@@ -17,6 +17,7 @@ class UserModel extends ParentModel
     public $timestamps = true;
 
     protected $fillable = [
+        "activation_code_id",
         "username",
         "firstname",
         "lastname",

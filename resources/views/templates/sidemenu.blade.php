@@ -40,6 +40,12 @@
                         لیست کاربران
                     </a>
                 </li>
+                <li>
+                    <a href="{{ url( "dashboard/user/management/register-form" ) }}">
+                        <i class="fas fa-user-check"></i>
+                        ثبت نام کاربر
+                    </a>
+                </li>
             </ul>
         </li>
     @endif
