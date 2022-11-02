@@ -29,4 +29,6 @@ const Routes = {
 
     //offline
     offlineCodeList: url + "/dashboard/offline/management/list",
+    offlineCodeRemove: url + "/dashboard/offline/management/remove",
+    offlineCodeUpdate: url + "/dashboard/offline/management/update",
 }

@@ -6,7 +6,7 @@
     <div class="col-sm-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title mb-3" id="title_list_box">لیست کاربران</h4>
+                <h4 class="card-title mb-3" id="title_list_box">لیست کدهای آفلاین</h4>
                 <div class="disable_focusable">
                     <table id="offline_code_management_table" class="table table-bordered table-responsive nowrap row-border hover order-column" data-page-length="25">
                         <thead>
@@ -17,6 +17,7 @@
                                 <th>آخرین کد کاربر</th>
                                 <th>آخرین کد فعالسازی محصول</th>
                                 <th>تعداد استفاده شده</th>
+                                <th>تعداد فرصت های باقی مانده</th>
                                 <th>اطلاعات استفاده کننده</th>
                                 <th>آیا کد برای سایت فروش است؟</th>
                                 <th>مشخصات خریدار</th>

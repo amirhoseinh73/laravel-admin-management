@@ -79,7 +79,6 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
             Route::get( "list", [ OfflineManagementController::class, "list" ] );
             Route::post( "remove", [ OfflineManagementController::class, "remove" ] );
             Route::post( "update", [ OfflineManagementController::class, "update" ] );
-            Route::post( "reset-password", [ OfflineManagementController::class, "resetPassword" ] );
 
             Route::get( "statistics", [ OfflineManagementController::class, "statistics" ] );
         } );

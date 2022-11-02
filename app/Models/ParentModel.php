@@ -20,16 +20,6 @@ class ParentModel extends Model
         return $date->format( "Y-m-d H:i:s" );
     }
 
-    public function updateBatchWithKey( array $dataToUpdate, string $key ) {
-        $valueOfKey = array_column( $dataToUpdate, $key );
-        _dump(
-            $dataToUpdate,
-            $key,
-            $valueOfKey
-        );
-        return $this->whereIn( $key, $valueOfKey )->update( $dataToUpdate );
-    }
-
     public function removeItemByID( $ID ) {
         return self::where( "id", "=", $ID )->delete();
     }

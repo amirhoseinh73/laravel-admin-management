@@ -29,22 +29,23 @@ class OfflineCodeManagement {
             table_selector.insertAdjacentHTML( "beforeend",
             `<tr data-id="${ data.id }">
                 <td>${ index + 1 }</td>
-                <td data-key="firstname" data-type="text">${ data.grade }</td>
-                <td data-key="lastname" data-type="text">${ data.windows_code }</td>
-                <td data-key="username" data-type="text" data-input-type="number">${ data.user_code || "" }</td>
-                <td data-key="mobile" data-type="text" data-input-type="number">${ data.generated_code || "" }</td>
-                <td data-key="grade" >${ this.getUsedTimes( data.limit_usage ) }</td>
-                <td data-key="created_at">${ this.handleMobileData( data.mobile ) }</td>
-                <td data-key="last_login_at">${ this.getIsForShoppingSite[ +data.is_for_shopping_site ] }</td>
-                <td data-key="recovered_password_at">${ data.order_id || "" }</td>
-                <td data-key="recovered_password_at">${ this.getIsDeleted( data.deleted_at ) }</td>
+                <td data-key="grade">${ data.grade }</td>
+                <td data-key="windows_code">${ data.windows_code }</td>
+                <td data-key="user_code">${ data.user_code || "" }</td>
+                <td data-key="generated_code">${ data.generated_code || "" }</td>
+                <td data-key="used_times">${ this.getUsedTimes( data.limit_usage ) }</td>
+                <td data-key="limit_usage" data-type="text" data-input-type="number">${ +data.limit_usage }</td>
+                <td data-key="mobile">${ this.handleMobileData( data.mobile ) }</td>
+                <td data-key="is_for_shopping_site">${ this.getIsForShoppingSite[ +data.is_for_shopping_site ] }</td>
+                <td data-key="order_id">${ data.order_id || "" }</td>
+                <td data-key="deleted_at">${ this.getIsDeleted( data.deleted_at ) }</td>
                 <td>
-                    <button type="button" class="btn btn-danger waves-effect waves-light fas fa-times btn-remove-data"></button>
+                    <button type="button" class="btn btn-danger waves-effect waves-light fas fa-times btn-remove-data" ${ ( data.deleted_at !== null && "disabled" ) }></button>
                 </td>
             </tr>` );
         } );
 
-        // this.itemDataHandler();
+        this.itemDataHandler();
         loadDataTable( "offline_code_management_table" )
     }
 
@@ -100,9 +101,6 @@ class OfflineCodeManagement {
         this.dataRemoveHandler();
 
         this.dataTypeTextHandler();
-        this.dataTypeSelectHandler();
-
-        this.resetPasswordHandler()
     }
 
     dataRemoveHandler() {
@@ -128,7 +126,7 @@ class OfflineCodeManagement {
                 method  : "POST",
             };
 
-            ajaxFetch( Routes.manageUserRemoveItem, this.dataRemoveHandlerEventSuccess.bind( button ), data );
+            ajaxFetch( Routes.offlineCodeRemove, this.dataRemoveHandlerEventSuccess.bind( button ), data );
         } );
     }
 
@@ -138,7 +136,8 @@ class OfflineCodeManagement {
             return;
         }
         sweetAlert( respond );
-        this.closest( "tr" ).remove();
+        this.closest( "tr" ).querySelector( "[data-key='deleted_at']" ).innerHTML = "<span class='badge badge-warning'>بلی</span>";
+        this.closest( "tr" ).querySelector( ".btn-remove-data" ).setAttribute( "disabled", "true" );
     }
 
     dataTypeTextHandler = () => {
@@ -174,7 +173,7 @@ class OfflineCodeManagement {
                 method  : "POST",
             };
 
-            ajaxFetch( Routes.manageUserUpdateItem, sweetAlert, data );
+            ajaxFetch( Routes.offlineCodeUpdate, sweetAlert, data );
         }
 
         if ( td.classList.contains( "active" ) ) return save();
@@ -205,117 +204,6 @@ class OfflineCodeManagement {
         input_text_number()
         
         return eventKeyUpEnterHandler( save );
-    }
-
-    dataTypeSelectHandler = () => {
-        const selectInputs = document.querySelectorAll( "[data-type='select']" );
-
-        selectInputs.forEach( select => {
-            select.addEventListener( "click", ( e ) => {
-                const td = e.target;
-                if ( td.tagName.toUpperCase() === "SELECT" || td.tagName.toUpperCase() === "OPTION" ) return ;
-                this.dataTypeSelectHandlerEvent.call( this, td.closest( "td" ) );
-            } );
-        } );
-    }
-
-    dataTypeSelectHandlerEvent = async ( td ) => {
-
-        const save = () => {
-            const select_box = td.querySelector( "select" );
-
-            const select_value_in_array = getSelectValues( select_box ).join( "," );
-            // const select_text = select_box.options[select_box.selectedIndex].text;
-            const key = td.dataset.key
-            const functionName = "get" + key[ 0 ].toUpperCase() + key.substring( 1 )
-
-            const callFunctionName = {
-                "getGrade": this.getGrade,
-                "getGender": this.getGender,
-                "getStatus": this.getStatus,
-            }
-
-            td.innerHTML = "";
-            td.insertAdjacentHTML( "afterbegin", `${ callFunctionName[functionName]( select_value_in_array ) }` );
-            td.setAttribute( "data-select-current", select_value_in_array );
-            
-            td.classList.remove( "active" );
-            
-            const ID = td.closest( "[data-id]" ).getAttribute( "data-id" );
-
-            const data = {
-                data    : {
-                    id: ID,
-                    key: key,
-                    data: select_value_in_array,
-                },
-                method : "POST",
-            };
-
-            ajaxFetch( Routes.manageUserUpdateItem, sweetAlert, data );
-        }
-
-        if ( td.classList.contains( "active" ) ) return save()
-
-        const selectOptions = td.dataset.select.split( "," )
-        const selectOptionValues = td.dataset.selectValue.split( "," )
-
-        if ( ! selectOptionValues || ! selectOptions ) return
-
-        const loadOptions = ( currentSelected ) => {
-            return selectOptions.map( ( option, index ) => {
-                const value = selectOptionValues[ index ]
-
-                return `<option value="${ value }" ${ ( currentSelected.includes( value ) ) ? "selected" : "" }>${ option }</option>`;
-            } ).join( "\n" );
-        }
-
-        const isMultiple = !!td.dataset.multiple
-        const currentSelected = td.dataset.selectCurrent.split( "," );
-
-        const createSelect = document.createElement( "select" )
-        const classes = [ "custom-select", "custom-select-sm", "input-enter-save" ]
-        createSelect.classList.add( ...classes )
-        createSelect.value = currentSelected[ 0 ]
-        if( isMultiple ) {
-            createSelect.multiple = "true"
-            createSelect.value = currentSelected
-        }
-        createSelect.insertAdjacentHTML( "beforeend", loadOptions( currentSelected ) )
-        createSelect.style.minWidth = "10rem"
-
-        td.innerHTML = "";
-        td.insertAdjacentElement( "afterbegin", createSelect )
-        td.classList.add( "active" );
-        
-        return eventKeyUpEnterHandler( save );
-    }
-
-    resetPasswordHandler() {
-        const buttons = document.querySelectorAll( ".btn-reset-password" );
-
-        buttons.forEach( button => {
-            button.addEventListener( "click", ( e ) => {
-                const button = e.target.closest( ".btn-reset-password" );
-                if ( ! button ) return console.error( "button not found" );
-                this.resetPasswordHandlerEvemt.call( this, button );
-            } );
-        } );
-    }
-
-    resetPasswordHandlerEvemt( button ) {
-        sweetAlertConfirm( () => {
-            const id = button.closest( "[data-id]" ).getAttribute( "data-id" );
-
-            const data = {
-                data    : {
-                    id: id,
-                },
-                method  : "POST",
-            };
-
-            ajaxFetch( Routes.manageUserResetPassword, sweetAlert, data );
-        } );
     }
 
 }

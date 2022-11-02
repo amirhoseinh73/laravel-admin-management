@@ -14,12 +14,14 @@
             </a>
         </li>
 
+        @if ( $user_data->username === "1400895798" || $user_data->username === "0016973178" )
         <li>
             <a href="{{ url( "dashboard/manage-book-content" ) }}" class="waves-effect">
                 <i class="fa fa-images"></i>
                 <span>مدیریت محتوا</span>
             </a>
         </li>
+        @endif
 
         <li>
             <a href="{{ url( "dashboard/generate-activation-code" ) }}" class="waves-effect">

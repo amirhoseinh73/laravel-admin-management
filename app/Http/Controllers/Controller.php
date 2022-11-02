@@ -34,7 +34,7 @@ class Controller extends BaseController
 
         if ( ! exists( $userInfo ) ) return null;
  
-		if ( file_exists( public_path( DIR_PROFILE_IMAGE . $userInfo->profile_image ) ) ) $userInfo->profile_image = url( DIR_PROFILE_IMAGE . $userInfo->profile_image );
+		if ( exists( $userInfo->profile_image ) && file_exists( public_path( DIR_PROFILE_IMAGE . $userInfo->profile_image ) ) ) $userInfo->profile_image = url( DIR_PROFILE_IMAGE . $userInfo->profile_image );
         else $userInfo->profile_image = url( DIR_PROFILE_IMAGE . "default.png" );
 
         return $userInfo;
