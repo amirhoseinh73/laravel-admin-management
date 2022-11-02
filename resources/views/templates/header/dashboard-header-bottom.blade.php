@@ -1,5 +1,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url( '/assets/css/bootstrap.min.css' ) }}" />
     <link rel="stylesheet" type="text/css" href="{{ url( '/assets/css/icons.css' ) }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url( '/inc/fonts/fontawsome/css/all.min.css' ) }}" />
 
     <link rel="stylesheet" type="text/css" href="{{ url( 'assets/css/app.css' ) }}" />
     <link rel="stylesheet" type="text/css" href="{{ url( '/assets/css/libs/jquery.md.bootstrap.datetimepicker.style.css' )  }}"/>

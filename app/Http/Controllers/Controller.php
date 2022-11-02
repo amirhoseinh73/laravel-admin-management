@@ -9,7 +9,9 @@ use App\Models\Book\UserModel as BookUserModel;
 use App\Models\CookieModel;
 use App\Models\OfflineActivationCodeModel;
 use App\Models\Shopping\DiscountCodeModel;
+use App\Models\Shopping\OrderModel;
 use App\Models\Shopping\ProductModel;
+use App\Models\Shopping\UserModel as ShoppingUserModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -48,6 +50,10 @@ class Controller extends BaseController
     protected function userBookModel() {
         return new BookUserModel();
     }
+    
+    protected function userShoppingModel() {
+        return new ShoppingUserModel();
+    }
 
     protected function cookieModel() {
         return new CookieModel();
@@ -75,5 +81,9 @@ class Controller extends BaseController
 
     protected function offlineActivationCodeModel() {
         return new OfflineActivationCodeModel();
+    }
+
+    protected function orderModel() {
+        return new OrderModel();
     }
 }

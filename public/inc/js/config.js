@@ -26,4 +26,7 @@ const Routes = {
     manageUserUpdateItem: url + "/dashboard/user/management/update",
     manageUserResetPassword: url + "/dashboard/user/management/reset-password",
     manageUserRegister: url + "/dashboard/user/management/register",
+
+    //offline
+    offlineCodeList: url + "/dashboard/offline/management/list",
 }

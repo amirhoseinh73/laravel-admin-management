@@ -16,6 +16,7 @@ function docReady(fn) {
 async function ajaxFetch( url, successFunction, data ) {
     document.body.insertAdjacentHTML( "beforeend", html_loading() );
     const preloader = document.getElementById( "preloader" );
+
     const form_data = new FormData();
     if ( data.method.toUpperCase() === "POST" ) {
         for ( const key in data.data ) {

@@ -48,6 +48,26 @@
                 </li>
             </ul>
         </li>
+        <li>
+            <a href="javascript:void(0)" class="has-arrow waves-effect">
+                <i class="fad fa-code"></i>
+                <span>مدیریت کدهای آفلاین</span>
+            </a>
+            <ul class="sub-menu" aria-expanded="false">
+                <li>
+                    <a href="{{ url( "dashboard/offline/management" ) }}">
+                        <i class="fas fa-file-code"></i>
+                        لیست همه کد ها
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url( "dashboard/offline/management/statistics" ) }}">
+                        <i class="fas fa-file-spreadsheet"></i>
+                        آمار
+                    </a>
+                </li>
+            </ul>
+        </li>
     @endif
     <li>
         <a href="{{ url( "/logout" ) }}" class="waves-effect">

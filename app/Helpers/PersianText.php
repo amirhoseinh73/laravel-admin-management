@@ -59,6 +59,9 @@ class PersianText {
             "user"          => "کاربران",
             "user_management" => "مدیریت کاربران",
 
+            "offline" => "کد های آفلاین",
+            "offline_management" => "مدیریت کدهای آفلاین",
+
             "register"      => "ثبت نام",
 
             "success"       => "موفقیت!",

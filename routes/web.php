@@ -5,6 +5,7 @@ use App\Http\Controllers\DiscountCodeController;
 use App\Http\Controllers\ManageContentBookController;
 use App\Http\Controllers\Offline\ManageOfflineBookController;
 use App\Http\Controllers\Offline\OfflineApiController;
+use App\Http\Controllers\Offline\OfflineManagementController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,18 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
 
             Route::get( "register-form", [ UserController::class, "registerPage" ] );
             Route::post( "register", [ UserController::class, "register" ] );
+        } );
+    } );
+
+    Route::group( [ "prefix" => "offline" ], function() {
+        Route::group( [ "prefix" => "management" ], function() {
+            Route::get( "/", [ OfflineManagementController::class, "management" ] );
+            Route::get( "list", [ OfflineManagementController::class, "list" ] );
+            Route::post( "remove", [ OfflineManagementController::class, "remove" ] );
+            Route::post( "update", [ OfflineManagementController::class, "update" ] );
+            Route::post( "reset-password", [ OfflineManagementController::class, "resetPassword" ] );
+
+            Route::get( "statistics", [ OfflineManagementController::class, "statistics" ] );
         } );
     } );
 } );

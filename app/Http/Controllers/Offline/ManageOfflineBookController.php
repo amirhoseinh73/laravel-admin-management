@@ -40,10 +40,9 @@ class ManageOfflineBookController extends Controller
         if ( ! exists( $selectCode ) ) return Alert::Error( "wrong_code" );
 
         //no update
-        if ( $selectCode->user_code === $userCode ) {
-            Helper::sendSmsIR( $mobile, $generatedCode, "success" );
-            return Alert::Success( "success_sms" );
-        }
+        $checkRepeatedCode = $this->checkRepeatedCode( $selectCode, $userCode, $generatedCode, $mobile );
+        if ( exists( $checkRepeatedCode ) ) return Alert::Success( "success_sms" );
+
         if ( +$selectCode->limit_usage === 0 ) return Alert::Error( "limit_code" );
 
         try {
@@ -79,7 +78,8 @@ class ManageOfflineBookController extends Controller
         if ( ! exists( $selectCode ) ) return Helper::sendSmsIR( $mobile, $userCode, "wrong_code" );
 
         //no update
-        if ( $selectCode->user_code === $userCode ) return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+        $checkRepeatedCode = $this->checkRepeatedCode( $selectCode, $userCode, $generatedCode, $mobile );
+        if ( exists( $checkRepeatedCode ) ) return $checkRepeatedCode;
         if ( +$selectCode->limit_usage === 0 ) return Helper::sendSmsIR( $mobile, $userCode, "limit_code" );
 
         try {
@@ -105,13 +105,43 @@ class ManageOfflineBookController extends Controller
         );
     }
 
+    private function checkRepeatedCode( $selectCode, $userCode, $generatedCode, $mobile ) {
+        if ( $selectCode->user_code === $userCode ) {
+            return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+        }
+        $olderCodes = json_decode( $selectCode->mobile, true );
+        if( is_array( $olderCodes ) ) {
+            foreach( $olderCodes as $olderCode ) {
+                if( is_array( $olderCode ) ) {
+                    foreach( $olderCode as $code ) {
+                        if( is_array( $code ) ) {
+                            if ( in_array( "$generatedCode", $code ) ) {
+                                return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+                            }
+                        } else {
+                            if ( "$generatedCode" === "$code" ) {
+                                return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+                            }
+                        }
+                    }
+                } else {
+                    if ( "$generatedCode" === "$olderCode" ) {
+                        return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     private function updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode ) {
         $offlineActivationCodeModel = $this->offlineActivationCodeModel();
 
         $mobileArray = array();
 
         $oldMobile = json_decode( $selectCode->mobile, true );
-        if ( exists( $oldMobile ) ) array_push( $mobileArray, $oldMobile );
+        if ( exists( $oldMobile ) ) array_push( $mobileArray, [ $oldMobile ] );
 
         array_push(
             $mobileArray,

@@ -305,3 +305,11 @@ function validateMathCaptchaAnswer( Request $request, $userAnswer ) {
 
     return true;
 }
+
+function filterArrayUsingParam( array $data, $usedParam, string $keyOfArray, string $keyOfUsed ) {
+    if( is_object( $usedParam ) ) $usedParam = (array)$usedParam;
+
+    return array_values( array_filter( $data, function( $key ) use( $usedParam, $keyOfArray, $keyOfUsed ) {
+        return $key[ $keyOfArray ] === $usedParam[ $keyOfUsed ];
+    } ) );
+}
