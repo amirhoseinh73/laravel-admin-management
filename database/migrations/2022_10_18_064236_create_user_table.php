@@ -26,6 +26,7 @@ class CreateUserTable extends Migration
             $table->tinyInteger( 'status' )->default( 1 )->comment( "1: ENABLED\n2: DISABLED\n3: SUSPENDED" );
             $table->boolean( 'is_logged_in' )->default( 0 );
             $table->timestamp( "last_login_at" )->nullable();
+            $table->timestamp( "expired_at" )->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->timestamp( 'recovered_password_at' )->nullable();

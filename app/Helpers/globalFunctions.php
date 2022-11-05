@@ -234,6 +234,32 @@ function convertGregorianDateTimeToJalaali( $datetime ) {
 }
 
 /**
+ * @return object `time` & `date`
+ */
+function jalaaliDatetimeToGregorian( $datetime ) {
+    if( ! exists( $datetime ) ) {
+        return ( object ) [
+            "time" => "00:00:00",
+            "date" => "0000-00-00",
+        ];
+    }
+    $datetime = explode( " ", $datetime );
+    $time     = $datetime[ count( $datetime ) - 1 ];
+    $date     = explode( "/", $datetime[ 0 ] );
+    $date     = jalali_to_gregorian( $date[ 0 ], $date[ 1 ], $date[ 2 ], "-" );
+
+    return ( object ) [
+        "time" => $time,
+        "date" => $date,
+    ];
+}
+
+function convertJalaaliDateTimeToGregorian( $datetime ) {
+    $datetime = jalaaliDatetimeToGregorian( $datetime );
+    return "$datetime->date $datetime->time";
+}
+
+/**
  * @param string $type `gregorian`|`jalali`
  */
 function getCurrentDateTime( string $type = "gregorian", int $time = null ) {

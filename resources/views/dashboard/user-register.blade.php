@@ -62,7 +62,19 @@
                             </select>
                         </div>
 
-                        <div class="col-12 col-sm-8 mt-auto">
+                        <div class="col-6 col-sm-4 mt-auto">
+                            <input type="checkbox" id="is_send_sms"/>
+                            <label for="is_send_sms" class="col-form-label">
+                                آیا پیامک ارسال شود؟
+                            </label>
+                            <hr class="my-0"/>
+                            <label for="expired_at" class="col-form-label">
+                                مهلت استفاده *
+                            </label>
+                            <input type="text" class="form-control text-center" id="expired_at" value="1402/07/01 00:00:00"/>
+                        </div>
+
+                        <div class="col-12 col-sm-4 mt-auto">
                             <button type="submit" class="btn btn-primary btn-block">ثبت نام</button>
                         </div>
                     </div>

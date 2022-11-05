@@ -28,6 +28,7 @@ class UserModel extends ParentModel
         "status",
         "is_logged_in",
         "last_login_at",
+        "expired_at",
         "recovered_password_at",
         "cookie",
         "password",
@@ -46,15 +47,22 @@ class UserModel extends ParentModel
     }
 
     public function selectUserWithCookie( string $cookie ) {
-        return self::where( "cookie", "=", $cookie )->first();
+        return self::where( "cookie", "=", $cookie )->where( "expired_at", ">", getCurrentDateTime() )->first();
     }
 
     public function updateUserDataWithUserID( int $userID, array $data ) {
         return self::where( "id", "=", $userID )->update( $data );
     }
 
-    public function selectAllUsersInPlatformAndBook( $bookUsers ) {
+    public function selectAllUsersInPlatformAndBook( $bookUsers, $is_user_registered_by_admin = false ) {
         $selectUsers = $this->all();
+
+        if ( $is_user_registered_by_admin ) {
+            $selectUsers = $this
+                ->where( "activation_code_id", "=", "0" )
+                ->orWhere( "activation_code_id", "=", "-1" )
+                ->get();
+        }
 
         foreach( $selectUsers as $user ) {
             $userBook = array_values( array_filter( $bookUsers, function( $key ) use( $user ) {

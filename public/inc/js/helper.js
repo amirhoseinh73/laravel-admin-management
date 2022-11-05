@@ -360,6 +360,29 @@ function viewPasswordButton() {
     } )
 }
 
+function callCalendar( ID, dateTimeValue = undefined ) {
+    $( '#' + ID ).MdPersianDateTimePicker({
+        targetTextSelector: '#' + ID,
+        placement: 'bottom',
+        englishNumber: true,
+        disabled: false,
+        selectedDate: dateTimeValue, //new Date('2018/9/30'),
+        disableBeforeToday: false,
+        disableAfterToday: false,
+        modalMode: false,
+        yearOffset: 3,
+        enableTimePicker: true,
+    }).on('show.bs.popover', function() {
+
+    }).on('hide.bs.popover', function() {
+
+    }).on('change', function() {
+
+    }).on('click', function(e) {
+        e.stopPropagation();
+    });
+}
+
 docReady( () => {
     input_text_number();
     viewPasswordButton()

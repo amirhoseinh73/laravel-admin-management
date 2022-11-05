@@ -22,6 +22,7 @@ const Routes = {
 
     //users
     userList: url + "/dashboard/user/management/list",
+    userListRegisteredByAdmin: url + "/dashboard/user/management/user-list-by-admin",
     manageUserRemoveItem: url + "/dashboard/user/management/remove",
     manageUserUpdateItem: url + "/dashboard/user/management/update",
     manageUserResetPassword: url + "/dashboard/user/management/reset-password",

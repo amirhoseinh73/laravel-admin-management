@@ -13,7 +13,10 @@ class UserManagement {
             method  : "GET",
         };
 
-        await ajaxFetch( Routes.userList, this.listUserHandler, data );
+        let routeListUser = Routes.userList
+        if ( typeof is_user_registered_by_admin !=="undefined" && is_user_registered_by_admin ) routeListUser = Routes.userListRegisteredByAdmin
+
+        await ajaxFetch( routeListUser, this.listUserHandler, data );
     }
 
     listUserHandler = ( respond ) => {
@@ -37,6 +40,7 @@ class UserManagement {
                 <td data-key="gender" data-type="select" data-select="آقا,خانم" data-select-value="1,2" data-select-current="${ data.gender }">${ this.getGender( data.gender ) }</td>
                 <td data-key="status" data-type="select" data-select="فعال,غیرفعال,مسدود" data-select-value="1,2,3" data-select-current="${ data.status }">${ this.getStatus( data.status ) }</td>
                 <td data-key="created_at">${ data.created_at }</td>
+                <td data-key="expired_at" data-type="datetime">${ data.expired_at }</td>
                 <td data-key="last_login_at">${ data.last_login_at }</td>
                 <td data-key="recovered_password_at">${ data.recovered_password_at }</td>
                 <td>
@@ -100,6 +104,8 @@ class UserManagement {
         this.dataTypeSelectHandler();
 
         this.resetPasswordHandler()
+
+        this.dataDatetimeHandler()
     }
 
     dataRemoveHandler() {
@@ -295,12 +301,12 @@ class UserManagement {
             button.addEventListener( "click", ( e ) => {
                 const button = e.target.closest( ".btn-reset-password" );
                 if ( ! button ) return console.error( "button not found" );
-                this.resetPasswordHandlerEvemt.call( this, button );
+                this.resetPasswordHandlerEvent.call( this, button );
             } );
         } );
     }
 
-    resetPasswordHandlerEvemt( button ) {
+    resetPasswordHandlerEvent( button ) {
         sweetAlertConfirm( () => {
             const id = button.closest( "[data-id]" ).getAttribute( "data-id" );
 
@@ -313,6 +319,68 @@ class UserManagement {
 
             ajaxFetch( Routes.manageUserResetPassword, sweetAlert, data );
         } );
+    }
+
+    dataDatetimeHandler = () => {
+        const data = document.querySelectorAll( "[data-type='datetime']" );
+
+        data.forEach( datum => {
+            datum.addEventListener( "click", ( e ) => {
+                const td = e.target;
+                if ( td.tagName.toUpperCase() === "INPUT" ) return ;
+                this.dataDatetimeHandlerEvent.call( this, td.closest( "td" ) );
+            } );
+        } );
+    }
+
+    dataDatetimeHandlerEvent = ( td ) => {
+
+        const id = td.closest( "[data-id]" ).getAttribute( "data-id" );
+
+        const save = () => {
+            const value = td.querySelector( "input" ).value.trim();
+
+            td.innerHTML = "";
+            td.insertAdjacentHTML( "afterbegin", `${ value }` );
+            
+            td.classList.remove( "active" );
+            const key = td.dataset.key
+
+            const data = {
+                data    : {
+                    id: id,
+                    data: value,
+                    key: key,
+                },
+                method  : "POST",
+            };
+
+            ajaxFetch( Routes.manageUserUpdateItem, sweetAlert, data );
+        }
+
+        if ( td.classList.contains( "active" ) ) return save();
+
+        const text = td.innerHTML.trim();
+        console.log(text);
+
+        td.innerHTML = "";
+        td.classList.add( "active" );
+
+        const createInput = document.createElement( "input" )
+        createInput.type = "text"
+        const classes = [ "form-control", "form-control-sm", "input-enter-save" ]
+        createInput.classList.add( ...classes )
+        createInput.value = text
+        createInput.id = "datetime" + id
+
+        createInput.style.minWidth = "10rem"
+        td.insertAdjacentElement( "afterbegin", createInput );
+
+        td.offsetLeft
+
+        callCalendar( "datetime" + id, text )
+        
+        return eventKeyUpEnterHandler( save );
     }
 
 }

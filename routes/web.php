@@ -64,6 +64,8 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
         Route::group( [ "prefix" => "management" ], function() {
             Route::get( "/", [ UserController::class, "management" ] );
             Route::get( "list", [ UserController::class, "list" ] );
+            Route::get( "user-registered-by-admin", [ UserController::class, "managementRegisteredUsersByAdmin" ] );
+            Route::get( "user-list-by-admin", [ UserController::class, "listUsersRegisteredByAdmin" ] );
             Route::post( "remove", [ UserController::class, "remove" ] );
             Route::post( "update", [ UserController::class, "update" ] );
             Route::post( "reset-password", [ UserController::class, "resetPassword" ] );

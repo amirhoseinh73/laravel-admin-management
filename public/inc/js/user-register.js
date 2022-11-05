@@ -5,7 +5,10 @@ const register = () => {
     const mobile    = document.getElementById( "mobile" ).value
     const password  = document.getElementById( "password" ).value
     const gender    = document.getElementById( "gender" ).value
+    const expired_at = document.getElementById( "expired_at" ).value
     const grade     = getSelectValues( document.getElementById( "grade" ) )
+
+    const is_send_sms = document.getElementById( "is_send_sms" ).checked
 
     const data = {
         data    : {
@@ -16,6 +19,8 @@ const register = () => {
             password: password,
             gender: gender,
             grade: grade,
+            expired_at: expired_at,
+            is_send_sms: is_send_sms,
         },
         method  : "POST",
     };
@@ -34,5 +39,6 @@ const registerSubmit = () => {
 }
 
 docReady( () => {
+    callCalendar( "expired_at" )
     registerSubmit()
 } )

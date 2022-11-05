@@ -43,6 +43,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ url( "dashboard/user/management/user-registered-by-admin" ) }}">
+                        <i class="fas fa-user-alien"></i>
+                        لیست کاربرانی که توسط ادمین ثبت شده اند
+                    </a>
+                </li>
+                <li>
                     <a href="{{ url( "dashboard/user/management/register-form" ) }}">
                         <i class="fas fa-user-check"></i>
                         ثبت نام کاربر

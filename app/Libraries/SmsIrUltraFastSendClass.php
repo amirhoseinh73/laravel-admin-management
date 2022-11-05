@@ -57,11 +57,13 @@ class SmsIrUltraFastSendClass {
      *
      * @return void
      */
-    public function __construct($APIKey, $SecretKey, $APIURL)
+    public function __construct($APIKey, $SecretKey, $APIURL, $LineNumber = null)
     {
         $this->APIKey = $APIKey;
         $this->SecretKey = $SecretKey;
         $this->APIURL = $APIURL;
+
+        $this->LineNumber = $LineNumber;
     }
 
     /**
@@ -171,6 +173,45 @@ class SmsIrUltraFastSendClass {
         $result = curl_exec($ch);
         curl_close($ch);
 
+        return $result;
+    }
+
+    /**
+     * Gets API Message Send Url.
+     *
+     * @return string Indicates the Url
+     */
+    protected function getAPIMessageSendUrl() 
+    {
+        return "api/MessageSend";
+    }
+
+    public function sendMessage($MobileNumbers, $Messages, $SendDateTime = '') 
+    {
+        $token = $this->_getToken($this->APIKey, $this->SecretKey);
+
+        if ($token != false) {
+            $postData = array(
+                'Messages' => $Messages,
+                'MobileNumbers' => $MobileNumbers,
+                'LineNumber' => $this->LineNumber,
+                'SendDateTime' => $SendDateTime,
+                'CanContinueInCaseOfError' => 'false'
+            );
+
+            $url = $this->APIURL.$this->getAPIMessageSendUrl();
+            $SendMessage = $this->_execute($postData, $url, $token);
+            $object = json_decode($SendMessage);
+
+            $result = false;
+            if (is_object($object)) {
+                $result = $object->Message;
+            } else {
+                $result = false;
+            }
+        } else {
+            $result = false;
+        }
         return $result;
     }
 }

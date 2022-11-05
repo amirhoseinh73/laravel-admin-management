@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Alert;
+use App\Helpers\Helper;
 use App\Helpers\PersianText;
 use Exception;
 use Illuminate\Http\Request;
@@ -92,8 +93,11 @@ class DiscountCodeController extends Controller
             $result = $discount_code_mdl->insert($data);
             if ( ! exists( $result ) ) return Alert::Error( "failed" );
 
+            if ( +$count_code === 1 && exists( $mobile ) ) Helper::sendSmsIRDiscountCode( $mobile, $code, $expire_jalali, $percent );
+
             return Alert::Success( 200, url( '/excel/' . $file_name ) );
         } catch ( Exception $e ) {
+            dd( $e );
             return Alert::Error( $e->getMessage() );
         }
     }

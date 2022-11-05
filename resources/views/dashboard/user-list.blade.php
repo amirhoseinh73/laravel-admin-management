@@ -26,6 +26,7 @@
                                     <abbr class="badge badge-warning">3 (مسدود شده)</abbr>
                                 </th>
                                 <th>تاریخ ثبت نام</th>
+                                <th>مهلت استفاده</th>
                                 <th>تاریخ آخرین ورود به سامانه</th>
                                 <th>تاریخ آخرین تغییر رمز عبور</th>
                                 <th>عملیات</th>
@@ -46,6 +47,11 @@
 @include('templates.footer.dashboard-footer-top')
 @include('templates.page.discount-code-footer')
 
-<script src="{{ url('/inc/js/user-management.js?ver=' . env( "VERSION" )) }}"></script>
+@if ( exists( $is_user_registered_by_admin ) && $is_user_registered_by_admin )
+    <script type="text/javascript">
+        const is_user_registered_by_admin = true
+    </script>
+@endif
+<script type="text/javascript" src="{{ url('/inc/js/user-management.js?ver=' . env( "VERSION" )) }}"></script>
 
 @include('templates.footer.dashboard-footer-bottom')
