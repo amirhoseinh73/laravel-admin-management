@@ -20,8 +20,8 @@
                             <strong style="font-size: 2rem">{{ $statistics[ "countAllActivated" ] }}</strong>
 
                             <br/>
-                            <i class="d-block" style="margin-right: 15rem">تعداد کدهای آفلاین فعال شده بر اساس پایه</i>
-                            <ul style="margin-right: 15rem">
+                            <i class="d-block mr-5">تعداد کدهای آفلاین فعال شده بر اساس پایه</i>
+                            <ul class="mr-5">
                                 <li>
                                     <strong>اول</strong>
                                     ====================>

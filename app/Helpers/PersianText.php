@@ -60,6 +60,8 @@ class PersianText {
             "discount_code_management" => "مدیریت کدهای تخفیف",
             "user"          => "کاربران",
             "user_management" => "مدیریت کاربران",
+            "shopping"        => "فروشگاه",
+            "order_list"       => "لیست فروش ها",
 
             "offline" => "کد های آفلاین",
             "offline_management" => "مدیریت کدهای آفلاین",

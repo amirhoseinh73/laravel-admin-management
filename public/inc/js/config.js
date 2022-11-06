@@ -32,4 +32,7 @@ const Routes = {
     offlineCodeList: url + "/dashboard/offline/management/list",
     offlineCodeRemove: url + "/dashboard/offline/management/remove",
     offlineCodeUpdate: url + "/dashboard/offline/management/update",
+
+    //shopping
+    shoppingListOrders: url + "/dashboard/shopping/list"
 }

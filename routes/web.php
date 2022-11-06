@@ -7,6 +7,7 @@ use App\Http\Controllers\Offline\ManageOfflineBookController;
 use App\Http\Controllers\Offline\OfflineApiController;
 use App\Http\Controllers\Offline\OfflineManagementController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShoppingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -84,6 +85,11 @@ Route::group( [ "middleware" => "ensureUserLoggedIn", "prefix" => "dashboard" ] 
 
             Route::get( "statistics", [ OfflineManagementController::class, "statistics" ] );
         } );
+    } );
+
+    Route::group( [ "prefix" => "shopping" ], function() {
+        Route::get( "/", [ ShoppingController::class, "index" ] );
+        Route::get( "list", [ ShoppingController::class, "list" ] );
     } );
 } );
 

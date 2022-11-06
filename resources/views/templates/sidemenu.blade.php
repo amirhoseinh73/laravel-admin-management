@@ -44,7 +44,7 @@
                 </li>
                 <li>
                     <a href="{{ url( "dashboard/user/management/user-registered-by-admin" ) }}">
-                        <i class="fas fa-user-alien"></i>
+                        <i class="fas fa-user-chart"></i>
                         لیست کاربرانی که توسط ادمین ثبت شده اند
                     </a>
                 </li>
@@ -75,6 +75,13 @@
                     </a>
                 </li>
             </ul>
+        </li>
+
+        <li>
+            <a href="{{ url( "dashboard/shopping" ) }}" class="waves-effect">
+                <i class="fa fa-cart-shopping"></i>
+                <span>لیست فروش سایت</span>
+            </a>
         </li>
     @endif
     <li>
