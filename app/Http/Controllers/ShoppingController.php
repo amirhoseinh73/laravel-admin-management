@@ -73,7 +73,7 @@ class ShoppingController extends Controller
                 if ( ! exists( $selectCity ) || ! exists( $selectCity[ 0 ] ) ) continue;
                 $selectCity = $selectCity[ 0 ];
 
-                $address = $selectProvince[ "title" ] . " - " . $selectAddress[ "address" ] . " - " . $selectCity[ "title" ];
+                $address = $selectProvince[ "title" ] . " - " . $selectCity[ "title" ] . " - " . $selectAddress[ "address" ];
                 $postCode = $selectAddress[ "postcode" ];
             }
 

@@ -46,7 +46,7 @@ class ManageOfflineBookController extends Controller
         if ( +$selectCode->limit_usage === 0 ) return Alert::Error( "limit_code" );
 
         try {
-            $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode );
+            $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode, "page" );
             if ( ! $result ) throw new Exception( "failed DB" );
 
             Helper::sendSmsIR( $mobile, $generatedCode, "success" );
@@ -83,7 +83,7 @@ class ManageOfflineBookController extends Controller
         if ( +$selectCode->limit_usage === 0 ) return Helper::sendSmsIR( $mobile, $userCode, "limit_code" );
 
         try {
-            $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode );
+            $result = $this->updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode, "sms" );
             if ( ! $result ) throw new Exception( "failed DB" );
 
             return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
@@ -117,6 +117,10 @@ class ManageOfflineBookController extends Controller
                         if( is_array( $code ) ) {
                             if ( in_array( "$generatedCode", $code ) ) {
                                 return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+                            } else if ( is_array( $code ) && count( $code ) !== 5 ) {
+                                if ( in_array( "$generatedCode", $this->checkArrayInArrayMobile( $code ) ) ) {
+                                    return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
+                                }
                             }
                         } else {
                             if ( "$generatedCode" === "$code" ) {
@@ -135,20 +139,32 @@ class ManageOfflineBookController extends Controller
         return null;
     }
 
-    private function updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode ) {
+    private function checkArrayInArrayMobile( $olderCodes ) {
+        if ( is_array( $olderCodes ) ) {
+            while( count( $olderCodes ) !== 5 ) {
+                return $this->checkArrayInArrayMobile( $olderCodes[ 0 ] );
+            }
+
+            return $olderCodes;
+        }
+
+        return $olderCodes;
+    }
+
+    private function updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode, $type ) {
         $offlineActivationCodeModel = $this->offlineActivationCodeModel();
 
         $mobileArray = array();
 
         $oldMobile = json_decode( $selectCode->mobile, true );
-        if ( exists( $oldMobile ) ) array_push( $mobileArray, [ $oldMobile ] );
+        if ( exists( $oldMobile ) ) array_push( $mobileArray, $oldMobile );
 
         array_push(
             $mobileArray,
             [
                 $mobile,
                 date( "Y-m-d H:i:s" ),
-                "page",
+                $type,
                 $generatedCode,
                 $userCode
             ]

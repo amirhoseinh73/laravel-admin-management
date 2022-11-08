@@ -43,36 +43,89 @@ class OfflineManagementController extends Controller
 
     private function mapHandleMobileArraySavedIntoDB( $code ) {
         $olderCodes = json_decode( $code[ "mobile" ], true );
-
         
         if( is_array( $olderCodes ) ) {
-            $code[ "mobile" ] = array();
-
-            foreach( $olderCodes as $olderCode ) {
-                if( is_array( $olderCode ) ) {
-                    if ( count( $olderCode ) === 5 ) {
-                        $code[ "mobile" ][] = $this->mobileArrayHandler( $olderCode );
-                    } else {
-                        foreach( $olderCode as $olderCode1 ) {
-                            if ( is_array( $olderCode1 ) && count( $olderCode1 ) === 5 ) {
-                                $code[ "mobile" ][] = $this->mobileArrayHandler( $olderCode1 );
-                            } else {
-                                $code[ "mobile" ][] = $olderCode1;
-                            }
-                        }
-                    }
-                } else {
-                    $code[ "mobile" ][] = $olderCode;
-                }
-            }
+            /**
+             * @author amirhosein hasani
+             * @see
+             * if anyone after me reach this code
+             * please don't insult me.
+             * following function is the result of CEO's idea of this project (manager of this company) and I just F**ing done it.
+             */
+            $code[ "mobile" ] = $this->removeArrayInArray( $olderCodes );
+            $code[ "mobile" ] = $this->removeArrayInArray2( $code[ "mobile" ] );
         }
 
         return $code;
     }
 
+    private function removeArrayInArray( $code ) {
+        if ( is_array( $code ) ) {
+            switch ( count( $code ) ) {
+                case 1:
+                    if ( is_array( $code ) ) {
+                        return $this->removeArrayInArray( $code[ 0 ] );
+                    }
+                    return $this->mobileArrayHandler( $code );
+                case 2:
+                    $code2 = [];
+                    foreach( $code as $c ) {
+                        $code2[] = $this->removeArrayInArray( $c );
+                    }
+                    return $code2;
+                case 5:
+                    return $this->mobileArrayHandler( $code );
+            }
+        }
+
+        return $this->mobileArrayHandler( $code );
+    }
+
+    private function removeArrayInArray2( $code ) {
+        $returnData = [];
+        if ( is_array( $code ) ) {
+            foreach( $code as $fc ) {
+                if ( is_array( $fc ) ) {
+                    if ( count( $fc ) === 5 ) {
+                        $returnData[] = $fc;
+                    } else {
+                        foreach( $fc as $fck ) {
+                            if ( is_array( $fck ) ) {
+                                if ( count( $fck ) === 5 ) {
+                                    $returnData[] = $fck;
+                                } else {
+                                    foreach( $fck as $fckun ) {
+                                        if ( is_array( $fckun ) ) {
+                                            if ( count( $fckun ) === 5 ) {
+                                                $returnData[] = $fckun;
+                                            }
+                                        } else {
+                                            $returnData[] = $fckun;
+                                        }
+                                    }
+                                }
+                            } else {
+                                $returnData[] = $fck;
+                            }
+                        }
+                    }
+                } else {
+                    $returnData[] = $fc;
+                }
+            }
+        } else {
+            $returnData[] = $code;
+        }
+
+        return $returnData;
+    }
+
     private function mobileArrayHandler( $code ) {
         $smsText = "از طریق پیامک";
         $pageText = "از طریق لینک";
+        if ( ! is_array( $code ) ) return array(
+            "موبایل" => $code,
+        );
         return array(
             "موبایل" => $code[ 0 ],
             "تاریخ" => gregorianDatetimeToJalali( $code[ 1 ] )->date,
