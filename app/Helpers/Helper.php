@@ -6,6 +6,11 @@ use App\Libraries\SmsIrUltraFastSendClass;
 use Exception;
 
 class Helper {
+    const PRODUCT_DESCRIPTION_REVERSE = array(
+        "physical - post" => true,
+        "download - link" => false
+    );
+    
     public static function sendSmsIR( $mobile, $code, $templateName = "wrong_code" ) {
         switch( $templateName ) {
             case "wrong_code":

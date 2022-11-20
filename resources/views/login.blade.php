@@ -1,5 +1,5 @@
 @php
-use App\Helpers\PersianText; 
+use App\Helpers\PersianText;
 @endphp
 @include( "templates.header.header" )
 <div class="account-pages my-0 pt-sm-5">

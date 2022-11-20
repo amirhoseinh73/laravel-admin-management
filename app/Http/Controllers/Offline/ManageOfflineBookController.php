@@ -28,7 +28,7 @@ class ManageOfflineBookController extends Controller
 
         if ( ! exists( $userCode ) || strlen( trim( $userCode ) ) !== 21 ) return Alert::Error( "wrong_code" );
         if ( ! exists( $mobile ) || ! isValidMobile( $mobile ) ) return Alert::Error( "wrong_mobile" );
-        if ( ! exists( $captchaAnswer ) || ! validateMathCaptchaAnswer( $request, $captchaAnswer ) ) return Alert::Error( "wrong_inputs" );
+        if ( ! isset( $captchaAnswer ) || ! validateMathCaptchaAnswer( $request, $captchaAnswer ) ) return Alert::Error( "wrong_inputs" );
 
         $calcCode = $this->calcCode( $userCode );
         $generatedCode = $calcCode->generatedCode;
@@ -62,6 +62,7 @@ class ManageOfflineBookController extends Controller
         $to = $request->get( "to" );
         $message = $request->get( "message" );
 
+        logFile( [$from, $to, $message], "logSMS" );
         if ( ! exists( $from ) || ! exists( $to ) || ! exists( $message ) ) return false;
 
         $userCode = $message;
@@ -110,45 +111,15 @@ class ManageOfflineBookController extends Controller
             return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
         }
         $olderCodes = json_decode( $selectCode->mobile, true );
-        if( is_array( $olderCodes ) ) {
-            foreach( $olderCodes as $olderCode ) {
-                if( is_array( $olderCode ) ) {
-                    foreach( $olderCode as $code ) {
-                        if( is_array( $code ) ) {
-                            if ( in_array( "$generatedCode", $code ) ) {
-                                return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
-                            } else if ( is_array( $code ) && count( $code ) !== 5 ) {
-                                if ( in_array( "$generatedCode", $this->checkArrayInArrayMobile( $code ) ) ) {
-                                    return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
-                                }
-                            }
-                        } else {
-                            if ( "$generatedCode" === "$code" ) {
-                                return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
-                            }
-                        }
-                    }
-                } else {
-                    if ( "$generatedCode" === "$olderCode" ) {
-                        return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
-                    }
-                }
-            }
+        
+        if( ! is_array( $olderCodes ) ) return null;
+
+        foreach( $olderCodes as $olderCode ) {
+            if ( is_array( $olderCode ) && in_array( "$generatedCode", $olderCode ) )
+                return Helper::sendSmsIR( $mobile, $generatedCode, "success" );
         }
 
         return null;
-    }
-
-    private function checkArrayInArrayMobile( $olderCodes ) {
-        if ( is_array( $olderCodes ) ) {
-            while( count( $olderCodes ) !== 5 ) {
-                return $this->checkArrayInArrayMobile( $olderCodes[ 0 ] );
-            }
-
-            return $olderCodes;
-        }
-
-        return $olderCodes;
     }
 
     private function updateOfflineCodeDB( $selectCode, $mobile, $userCode, $generatedCode, $type ) {
@@ -157,7 +128,10 @@ class ManageOfflineBookController extends Controller
         $mobileArray = array();
 
         $oldMobile = json_decode( $selectCode->mobile, true );
-        if ( exists( $oldMobile ) ) array_push( $mobileArray, $oldMobile );
+        if ( exists( $oldMobile ) ) {
+            if ( is_array( $oldMobile ) ) $mobileArray = $oldMobile;
+            elseif ( ! is_array( $oldMobile ) ) $mobileArray = [ $oldMobile ];
+        }
 
         array_push(
             $mobileArray,

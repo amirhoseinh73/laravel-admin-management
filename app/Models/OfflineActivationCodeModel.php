@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class OfflineActivationCodeModel extends ParentModel
 {
@@ -32,5 +33,10 @@ class OfflineActivationCodeModel extends ParentModel
 
     public function updateDataByID( $ID, $data ) {
         return $this->where( "id", "=", $ID )->update( $data );
+    }
+
+    public function updateBatch( array $dataToUpdate, array $uniqeBy, array $updateColumns ) {
+        //DB::table( $this->getTable() )
+        return DB::table( $this->getTable() )->upsert( $dataToUpdate, $uniqeBy, $updateColumns );
     }
 }

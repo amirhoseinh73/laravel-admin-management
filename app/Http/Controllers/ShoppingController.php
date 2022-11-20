@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Alert;
+use App\Helpers\Helper;
 use App\Helpers\PersianText;
 use App\Models\Shopping\AddressModel;
 use App\Models\Shopping\CartItemModel;
@@ -25,23 +26,15 @@ class ShoppingController extends Controller
     }
 
     public function list() {
-        $userShoppingModel = $this->userShoppingModel();
-        $paymentTrackModel = $this->paymentTrackModel();
-        $paymentRequestModel = $this->paymentRequestModel();
-        $addressModel = $this->addressModel();
-        $cartItemModel = $this->cartItemModel();
-        $productModel = $this->productModel();
-        $provinceCityModel = $this->provinceCityModel();
-        $orderModel = $this->orderModel();
-
-        $selectAllPaymentTracks = $paymentTrackModel->all()->toArray();
-        $selectAllShoppingUsers = $userShoppingModel->all()->toArray();
-        $selectAllPaymentRequests = $paymentRequestModel->all()->toArray();
-        $selectAllAddresses = $addressModel->all()->toArray();
-        $selectAllCartItems = $cartItemModel->all()->toArray();
-        $selectAllProducts = $productModel->all()->toArray();
-        $selectAllProvinceCities = $provinceCityModel->all()->toArray();
-        $selectAllOrders = $orderModel->all()->toArray();
+        $selectAllData = $this->getDataForPaymentRecord();
+        $selectAllPaymentTracks = $selectAllData[ "allPaymentTracks" ];
+        $selectAllShoppingUsers = $selectAllData[ "allShoppingUsers" ];
+        $selectAllPaymentRequests = $selectAllData[ "allPaymentRequests" ];
+        $selectAllAddresses = $selectAllData[ "allAddresses" ];
+        $selectAllCartItems = $selectAllData[ "allCartItems" ];
+        $selectAllProducts = $selectAllData[ "allProducts" ];
+        $selectAllProvinceCities = $selectAllData[ "allProvinceCities" ];
+        $selectAllOrders = $selectAllData[ "allOrders" ];
 
         $dataToReturn = array();
         foreach( $selectAllPaymentTracks as $selectPaymentTrack ) {
@@ -58,24 +51,9 @@ class ShoppingController extends Controller
             if ( ! exists( $selectOrder ) || ! exists( $selectOrder[ 0 ] ) ) continue;
             $selectOrder = $selectOrder[ 0 ];
 
-            $address = "";
-            $postCode = "";
-            if ( exists( $selectOrder[ "address_id" ] ) ) {
-                $selectAddress = filterArrayUsingParam( $selectAllAddresses, $selectOrder, "ID", "address_id" );
-                if ( ! exists( $selectAddress ) || ! exists( $selectAddress[ 0 ] ) ) continue;
-                $selectAddress = $selectAddress[ 0 ];
-
-                $selectProvince = filterArrayUsingParam( $selectAllProvinceCities, $selectAddress, "ID", "province_id" );
-                if ( ! exists( $selectProvince ) || ! exists( $selectProvince[ 0 ] ) ) continue;
-                $selectProvince = $selectProvince[ 0 ];
-
-                $selectCity = filterArrayUsingParam( $selectAllProvinceCities, $selectAddress, "ID", "city_id" );
-                if ( ! exists( $selectCity ) || ! exists( $selectCity[ 0 ] ) ) continue;
-                $selectCity = $selectCity[ 0 ];
-
-                $address = $selectProvince[ "title" ] . " - " . $selectCity[ "title" ] . " - " . $selectAddress[ "address" ];
-                $postCode = $selectAddress[ "postcode" ];
-            }
+            $addressInfo = $this->getAddressInfo( $selectOrder, $selectAllAddresses, $selectAllProvinceCities );
+            $address = $addressInfo[ "address" ];
+            $postCode = $addressInfo[ "postCode" ];
 
             $selectCartItems = array_values( array_filter( $selectAllCartItems, function( $key ) use( $selectOrder ) {
                 $cartItemIDs = explode( ",", $selectOrder[ "cart_items_ids" ] );
@@ -83,14 +61,9 @@ class ShoppingController extends Controller
             } ) );
             if ( ! exists( $selectCartItems ) ) continue;
 
-            $productList = array();
-            foreach( $selectCartItems as $cartItem ) {
-                $selectProduct = filterArrayUsingParam( $selectAllProducts, $cartItem, "ID", "product_id" );
-                if ( ! exists( $selectProduct ) || ! exists( $selectProduct[ 0 ] ) ) continue;
-                $selectProduct = $selectProduct[ 0 ];
+            $productList = $this->getListProduct( $selectOrder, $selectAllCartItems, $selectAllProducts );
 
-                $productList[] = $selectProduct[ "title" ] . " * " . $cartItem[ "count" ];
-            }
+            $jalaaliDateTime = convertGregorianDateTimeToJalaali( $selectPaymentTrack[ "created_at" ] );
 
             $dataToReturn[] = array(
                 "firstname" => $selectUser[ "firstname" ],
@@ -104,10 +77,87 @@ class ShoppingController extends Controller
                 "address" => $address,
                 "post_code" => $postCode,
                 "res_num" => $selectPaymentTrack[ "res_num" ],
+                "created_at" => $jalaaliDateTime
             );
         }
 
         return Alert::Success( 200, $dataToReturn );
+    }
+
+    private function getDataForPaymentRecord() {
+        $userShoppingModel = $this->userShoppingModel();
+        $paymentTrackModel = $this->paymentTrackModel();
+        $paymentRequestModel = $this->paymentRequestModel();
+        $addressModel = $this->addressModel();
+        $cartItemModel = $this->cartItemModel();
+        $productModel = $this->productModel();
+        $provinceCityModel = $this->provinceCityModel();
+        $orderModel = $this->orderModel();
+
+        return array(
+            "allPaymentTracks" => $paymentTrackModel->all()->toArray(),
+            "allShoppingUsers" => $userShoppingModel->all()->toArray(),
+            "allPaymentRequests" => $paymentRequestModel->all()->toArray(),
+            "allAddresses" => $addressModel->all()->toArray(),
+            "allCartItems" => $cartItemModel->all()->toArray(),
+            "allProducts" => $productModel->all()->toArray(),
+            "allProvinceCities" => $provinceCityModel->all()->toArray(),
+            "allOrders" => $orderModel->all()->toArray()
+        );
+    }
+
+    private function getAddressInfo( $selectOrder, $selectAllAddresses, $selectAllProvinceCities ) {
+        $dataToReturn = array(
+            "address" => "",
+            "postCode" => ""
+        );
+        if ( ! exists( $selectOrder[ "address_id" ] ) ) return $dataToReturn;
+
+        $selectAddress = filterArrayUsingParam( $selectAllAddresses, $selectOrder, "ID", "address_id" );
+        if ( ! exists( $selectAddress ) || ! exists( $selectAddress[ 0 ] ) ) return $dataToReturn;
+        $selectAddress = $selectAddress[ 0 ];
+
+        $selectProvince = filterArrayUsingParam( $selectAllProvinceCities, $selectAddress, "ID", "province_id" );
+        if ( ! exists( $selectProvince ) || ! exists( $selectProvince[ 0 ] ) ) return $dataToReturn;
+        $selectProvince = $selectProvince[ 0 ];
+
+        $selectCity = filterArrayUsingParam( $selectAllProvinceCities, $selectAddress, "ID", "city_id" );
+        if ( ! exists( $selectCity ) || ! exists( $selectCity[ 0 ] ) ) return $dataToReturn;
+        $selectCity = $selectCity[ 0 ];
+
+        $dataToReturn[ "address" ] = $selectProvince[ "title" ] . " - " . $selectCity[ "title" ] . " - " . $selectAddress[ "address" ];
+        $dataToReturn[ "postCode" ] = $selectAddress[ "postcode" ];
+
+        return $dataToReturn;
+    }
+
+    private function getListProduct( $selectOrder, $selectAllCartItems, $selectAllProducts ) {
+        $productList = array();
+        $selectCartItems = array_values( array_filter( $selectAllCartItems, function( $key ) use( $selectOrder ) {
+            $cartItemIDs = explode( ",", $selectOrder[ "cart_items_ids" ] );
+            return in_array( $key[ "ID" ], $cartItemIDs );
+        } ) );
+        if ( ! exists( $selectCartItems ) ) $productList;
+
+        foreach( $selectCartItems as $cartItem ) {
+            $selectProduct = filterArrayUsingParam( $selectAllProducts, $cartItem, "ID", "product_id" );
+            if ( ! exists( $selectProduct ) || ! exists( $selectProduct[ 0 ] ) ) continue;
+            $selectProduct = $selectProduct[ 0 ];
+
+            $DownloadOrDVD = "آنلاین";
+            if ( $selectProduct[ "type" ] === 1 ) {
+                $isPhysical = Helper::PRODUCT_DESCRIPTION_REVERSE[ $cartItem[ "description" ] ];
+                $DownloadOrDVD = "دانلودی";
+                if ( $isPhysical ) $DownloadOrDVD = "DVD";
+            }
+
+            $title = $selectProduct[ "title" ];
+            $count = $cartItem[ "count" ];
+
+            $productList[] = "$title * $count ($DownloadOrDVD)";
+        }
+
+        return $productList;
     }
 
     private function paymentTrackModel() {

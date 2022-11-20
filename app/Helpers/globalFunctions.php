@@ -280,7 +280,8 @@ function toFixed($number, $decimals = 1){
 }
 
 function logFile($data, $name = null){
-    if ( ! $name ) $name = "log-" . time() . ".json";
+    if ( ! $name ) $name = "log";
+    $name .= "-" . time() . ".json";
     $log = fopen( public_path( "log/$name" ), "w+");
     fwrite( $log, jsonEncodeUnicode( array( "data" => $data ) ) );
     fclose( $log );
@@ -316,7 +317,7 @@ function createMathCaptchaText( Request $request ) {
     }
 
     //set session
-    $request->session()->put( "captchaMathAnswer", $answer );
+    $request->session()->put( "captchaMathAnswer", "$answer" );
     $request->session()->save();
 
     return "$firstNumber $operator $secondNumber = ";

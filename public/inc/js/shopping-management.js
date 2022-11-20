@@ -41,6 +41,7 @@ class ShoppingManagement {
                 <td data-key="address">${ data.address }</td>
                 <td data-key="address">${ data.post_code }</td>
                 <td data-key="res_num">${ data.res_num }</td>
+                <td data-key="created_at">${ data.created_at }</td>
             </tr>` );
         } );
 

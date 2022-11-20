@@ -2,11 +2,11 @@
 
 namespace App\Models\Shopping;
 
+use App\Models\ParentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PaymentTrackModel extends Model
+class PaymentTrackModel extends ParentModel
 {
     use HasFactory;
     use SoftDeletes;
